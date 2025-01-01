@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reservation Details{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/reservation.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="reservation-container">
+        <h1 class="page-title">Reservation Details</h1>
+
+        <table class="reservation-details">
+            <tbody>
+            <tr>
+                <th>ID</th>
+                <td>{{ reservation.id }}</td>
+            </tr>
+            <tr>
+                <th>Start Date</th>
+                <td>{{ reservation.dateDebut ? reservation.dateDebut|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>End Date</th>
+                <td>{{ reservation.dateFin ? reservation.dateFin|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ reservation.statut }}</td>
+            </tr>
+            <tr>
+                <th>Immobilier</th>
+                <td>{{ reservation.immobilier.description }}</td>  <!-- Affichage de l'immobilier -->
+            </tr>
+            </tbody>
+        </table>
+
+
+
+        <div class="action-buttons">
+            <a class="btn btn-back" href="{{ path('app_reservation_index') }}">Back to List</a>
+            <a class="btn btn-edit" href="{{ path('app_reservation_edit', {'id': reservation.id}) }}">Edit</a>
+            <a class="btn btn-edit" href="{{ path('app_facture_download', { id: reservation.facture.id }) }}" class="btn btn-primary">
+                Télécharger la facture
+            </a>
+        </div>
+
+        {{ include('reservation/_delete_form.html.twig') }}
+    </div>
+{% endblock %}

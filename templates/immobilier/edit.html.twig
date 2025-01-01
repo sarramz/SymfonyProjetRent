@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Immobilier{% endblock %}
+
+{% block body %}
+    <h1 class="form-title">Edit Immobilier</h1>
+
+    <form id="immobilierForm" class="styled-form" action="{{ path('app_immobilier_edit', {id: immobilier.id}) }}" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="immobilierPrix">Prix</label>
+            <input type="number" id="immobilierPrix" name="prix" placeholder="Enter price" required class="form-control" value="{{ immobilier.prix }}">
+        </div>
+
+        <div class="form-group">
+            <label for="immobilierDescription">Description</label>
+            <textarea id="immobilierDescription" name="description" rows="4" placeholder="Enter description" required class="form-control">{{ immobilier.description }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="immobilierAdresse">Adresse</label>
+            <input type="text" id="immobilierAdresse" name="adresse" placeholder="Enter address" required class="form-control" value="{{ immobilier.adresse }}">
+        </div>
+
+        <div class="form-group">
+            <label for="immobilierVille">Ville</label>
+            <input type="text" id="immobilierVille" name="ville" placeholder="Enter city" required class="form-control" value="{{ immobilier.ville }}">
+        </div>
+
+        <div class="form-group">
+            <label for="immobilierRegion">Région</label>
+            <input type="text" id="immobilierRegion" name="region" placeholder="Enter region" required class="form-control" value="{{ immobilier.region }}">
+        </div>
+
+        <div class="form-group">
+            <label for="immobilierNbrChambres">Nombre de Chambres</label>
+            <input type="number" id="immobilierNbrChambres" name="nbr_chambres" placeholder="Enter number of rooms" required class="form-control" value="{{ immobilier.nbrChambres }}">
+        </div>
+
+        <div class="form-group">
+            <label for="immobilierStatut">Statut</label>
+            <select id="immobilierStatut" name="statut" required class="form-control">
+                <option value="1" {% if immobilier.statut == 1 %}selected{% endif %}>Disponible</option>
+                <option value="0" {% if immobilier.statut == 0 %}selected{% endif %}>Non Disponible</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="immobilierImage">Image</label>
+            {% if immobilier.image %}
+                <div>
+                    <img src="{{ asset('images/' ~ immobilier.image) }}" alt="Current Image" style="max-width: 100%; height: auto; margin-bottom: 10px;">
+                </div>
+            {% endif %}
+            <input type="file" id="immobilierImage" name="image" class="form-control">
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Save Changes
+        </button>
+    </form>
+
+    <a href="{{ path('app_immobilier_index') }}" class="btn btn-secondary back-button">Back to list</a>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

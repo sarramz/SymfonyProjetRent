@@ -1,0 +1,287 @@
+/* Base Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+/* Containers */
+.container {
+    margin-top: 50px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Header Styles */
+h1 {
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f1f1f1;
+}
+
+/* Action Buttons */
+button {
+    border: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Buttons Colors */
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    transform: scale(1.05);
+}
+
+.btn-back {
+    background-color: #6c757d;
+    color: white;
+    margin-right: 10px;
+}
+
+.btn-back:hover {
+    background-color: #5a6268;
+    transform: scale(1.05);
+}
+
+/* Select & Input Fields */
+.form-group {
+    margin-bottom: 20px;
+}
+
+input[type="date"],
+select,
+textarea,
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    transition: border-color 0.3s ease;
+}
+
+input[type="date"]:focus,
+select:focus,
+textarea:focus,
+input[type="text"]:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Forms on Create and Edit Pages */
+form {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+}
+
+/* Form Labels */
+label {
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* Table Row Animations */
+table tbody tr {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+table tbody tr:nth-child(even) {
+    animation: fadeInLeft 0.5s ease 0.2s forwards;
+}
+
+table tbody tr:nth-child(odd) {
+    animation: fadeInRight 0.5s ease 0.2s forwards;
+}
+
+@keyframes fadeInLeft {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInRight {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Modal or Popup (if needed for delete action confirmation) */
+.delete-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.delete-modal.active {
+    display: flex;
+}
+
+.delete-modal .modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    text-align: center;
+}
+
+.delete-modal button {
+    width: 40%;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 4px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.delete-modal button:hover {
+    background-color: #c82333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .container {
+        margin-top: 30px;
+        padding: 15px;
+    }
+
+    table th, table td {
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .btn {
+        padding: 8px 16px;
+    }
+
+    /* Full Width for Inputs */
+    input[type="date"],
+    select,
+    textarea,
+    input[type="text"] {
+        width: 100%;
+    }
+}
+
+/* Hover Effects on Reservation Table Rows */
+table tbody tr:hover {
+    background-color: #e9ecef;
+    cursor: pointer;
+}
+
+/* Animation to the Action buttons on Hover */
+.action-buttons a {
+    padding: 8px 16px;
+    border-radius: 4px;
+    margin-right: 10px;
+    text-decoration: none;
+}
+
+.action-buttons a:hover {
+    opacity: 0.8;
+    transform: scale(1.05);
+}
+
+/* Page Transitions */
+.page-title {
+    font-size: 2rem;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.reservation-details th {
+    width: 25%;
+}
+
+.reservation-details td {
+    padding-left: 10px;
+}
+
+/* For Detail Table */
+.reservation-container .reservation-details {
+    width: 100%;
+    margin-top: 30px;
+    border-collapse: collapse;
+}
+
+.reservation-container .reservation-details td {
+    padding: 8px 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.reservation-container .action-buttons {
+    margin-top: 20px;
+    text-align: center;
+}
+
+

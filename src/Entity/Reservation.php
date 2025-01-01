@@ -36,7 +36,7 @@ class Reservation
 
     #[ORM\ManyToOne(inversedBy: 'reservation')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Utilisateur $utilisateur = null;
+    private ?User $User = null;
 
     public function getId(): ?int
     {
@@ -122,14 +122,14 @@ class Reservation
         return $this;
     }
 
-    public function getUtilisateur(): ?Utilisateur
+    public function getUser(): ?User
     {
-        return $this->utilisateur;
+        return $this->User;
     }
 
-    public function setUtilisateur(?Utilisateur $utilisateur): static
+    public function setUser(?User $User): static
     {
-        $this->utilisateur = $utilisateur;
+        $this->User = $User;
 
         return $this;
     }

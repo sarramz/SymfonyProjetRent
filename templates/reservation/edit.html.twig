@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Reservation{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/reservation.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Edit Reservation</h1>
+
+        <form method="post" action="{{ path('app_reservation_edit', {'id': reservation.id}) }}">
+            <div class="form-group">
+                <label for="date_debut">Start Date</label>
+                <input type="date" id="date_debut" name="date_debut" value="{{ reservation.dateDebut|date('Y-m-d') }}" required class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="date_fin">End Date</label>
+                <input type="date" id="date_fin" name="date_fin" value="{{ reservation.dateFin|date('Y-m-d') }}" required class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="statut">Status</label>
+                <select name="statut" id="statut" class="form-control">
+                    <option value="En attente" {% if reservation.statut == 'En attente' %}selected{% endif %}>Pending</option>
+                    <option value="Confirmée" {% if reservation.statut == 'Confirmée' %}selected{% endif %}>Confirmed</option>
+                    <option value="Annulée" {% if reservation.statut == 'Annulée' %}selected{% endif %}>Cancelled</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="facture_id">Facture</label>
+                <select name="facture_id" id="facture_id" class="form-control">
+                    <option value="">Select Facture</option>
+                    {% for facture in factures %}
+                        <option value="{{ facture.id }}" {% if reservation.facture and reservation.facture.id == facture.id %}selected{% endif %}>
+                            {{ facture.contenu }} - {{ facture.montantHT }}€
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="immobilier_id">Immobilier</label>
+                <select name="immobilier_id" id="immobilier_id" class="form-control">
+                    {% for immobilier in immobiliers %}
+                        <option value="{{ immobilier.id }}" {% if reservation.immobilier.id == immobilier.id %}selected{% endif %}>
+                            {{ immobilier.description }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+
+    </div>
+{% endblock %}

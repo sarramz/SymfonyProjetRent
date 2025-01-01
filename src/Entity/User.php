@@ -2,76 +2,62 @@
 
 namespace App\Entity;
 
-use App\Repository\UtilisateurRepository;
+use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-#[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
-class Utilisateur
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $nom = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $prenom = null;
-
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $date_naissance = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $telephone = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $adresse = null;
-
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 180)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $username = null;
+    /**
+     * @var list<string> The user roles
+     */
+    #[ORM\Column]
+    private array $roles = [];
 
-    #[ORM\Column(length: 255)]
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column]
     private ?string $password = null;
-
-    #[ORM\Column]
-    private ?int $etat = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $image = null;
-
-    #[ORM\Column]
-    private ?bool $isadmin = null;
 
     /**
      * @var Collection<int, Reclamation>
      */
-    #[ORM\OneToMany(targetEntity: Reclamation::class, mappedBy: 'utilisateur')]
+    #[ORM\OneToMany(targetEntity: Reclamation::class, mappedBy: 'user')]
     private Collection $reclamation;
 
     /**
      * @var Collection<int, Notification>
      */
-    #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'utilisateur')]
+    #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'user')]
     private Collection $notification;
 
     /**
      * @var Collection<int, Immobilier>
      */
-    #[ORM\OneToMany(targetEntity: Immobilier::class, mappedBy: 'utilisateur')]
+    #[ORM\OneToMany(targetEntity: Immobilier::class, mappedBy: 'user')]
     private Collection $immobilier;
 
 
     /**
      * @var Collection<int, Reservation>
      */
-    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'utilisateur')]
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'user')]
     private Collection $reservation;
 
     /**
@@ -89,93 +75,13 @@ class Utilisateur
     /**
      * @var Collection<int, Avis>
      */
-    #[ORM\OneToMany(targetEntity: Avis::class, mappedBy: 'utilisateur')]
+    #[ORM\OneToMany(targetEntity: Avis::class, mappedBy: 'user')]
     private Collection $avis;
 
-
-
-    public function __construct()
-    {
-        $this->reclamation = new ArrayCollection();
-        $this->notification = new ArrayCollection();
-        $this->immobilier = new ArrayCollection();
-        $this->reservation = new ArrayCollection();
-        $this->sentmessages = new ArrayCollection();
-        $this->recivedmessages = new ArrayCollection();
-        $this->avis = new ArrayCollection();
-
-    }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setId(int $id): static
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    public function getNom(): ?string
-    {
-        return $this->nom;
-    }
-
-    public function setNom(string $nom): static
-    {
-        $this->nom = $nom;
-
-        return $this;
-    }
-
-    public function getPrenom(): ?string
-    {
-        return $this->prenom;
-    }
-
-    public function setPrenom(string $prenom): static
-    {
-        $this->prenom = $prenom;
-
-        return $this;
-    }
-
-    public function getDateNaissance(): ?\DateTimeInterface
-    {
-        return $this->date_naissance;
-    }
-
-    public function setDateNaissance(\DateTimeInterface $date_naissance): static
-    {
-        $this->date_naissance = $date_naissance;
-
-        return $this;
-    }
-
-    public function getTelephone(): ?string
-    {
-        return $this->telephone;
-    }
-
-    public function setTelephone(string $telephone): static
-    {
-        $this->telephone = $telephone;
-
-        return $this;
-    }
-
-    public function getAdresse(): ?string
-    {
-        return $this->adresse;
-    }
-
-    public function setAdresse(string $adresse): static
-    {
-        $this->adresse = $adresse;
-
-        return $this;
     }
 
     public function getEmail(): ?string
@@ -190,18 +96,43 @@ class Utilisateur
         return $this;
     }
 
-    public function getUsername(): ?string
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
     {
-        return $this->username;
+        return (string) $this->email;
     }
 
-    public function setUsername(string $username): static
+    /**
+     * @see UserInterface
+     *
+     * @return list<string>
+     */
+    public function getRoles(): array
     {
-        $this->username = $username;
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    /**
+     * @param list<string> $roles
+     */
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
 
         return $this;
     }
 
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
     public function getPassword(): ?string
     {
         return $this->password;
@@ -214,40 +145,24 @@ class Utilisateur
         return $this;
     }
 
-    public function getEtat(): ?int
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials(): void
     {
-        return $this->etat;
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
-
-    public function setEtat(int $etat): static
+    public function __construct()
     {
-        $this->etat = $etat;
+        $this->reclamation = new ArrayCollection();
+        $this->notification = new ArrayCollection();
+        $this->immobilier = new ArrayCollection();
+        $this->reservation = new ArrayCollection();
+        $this->sentmessages = new ArrayCollection();
+        $this->recivedmessages = new ArrayCollection();
+        $this->avis = new ArrayCollection();
 
-        return $this;
-    }
-
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(string $image): static
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
-    public function isadmin(): ?bool
-    {
-        return $this->isadmin;
-    }
-
-    public function setAdmin(bool $isadmin): static
-    {
-        $this->isadmin = $isadmin;
-
-        return $this;
     }
 
     /**
@@ -262,7 +177,7 @@ class Utilisateur
     {
         if (!$this->reclamation->contains($reclamation)) {
             $this->reclamation->add($reclamation);
-            $reclamation->setUtilisateur($this);
+            $reclamation->setUser($this);
         }
 
         return $this;
@@ -272,8 +187,8 @@ class Utilisateur
     {
         if ($this->reclamation->removeElement($reclamation)) {
             // set the owning side to null (unless already changed)
-            if ($reclamation->getUtilisateur() === $this) {
-                $reclamation->setUtilisateur(null);
+            if ($reclamation->getUser() === $this) {
+                $reclamation->setUser(null);
             }
         }
 
@@ -292,7 +207,7 @@ class Utilisateur
     {
         if (!$this->notification->contains($notification)) {
             $this->notification->add($notification);
-            $notification->setUtilisateur($this);
+            $notification->setUser($this);
         }
 
         return $this;
@@ -302,8 +217,8 @@ class Utilisateur
     {
         if ($this->notification->removeElement($notification)) {
             // set the owning side to null (unless already changed)
-            if ($notification->getUtilisateur() === $this) {
-                $notification->setUtilisateur(null);
+            if ($notification->getUser() === $this) {
+                $notification->setUser(null);
             }
         }
 
@@ -322,7 +237,7 @@ class Utilisateur
     {
         if (!$this->immobilier->contains($immobilier)) {
             $this->immobilier->add($immobilier);
-            $immobilier->setUtilisateur($this);
+            $immobilier->setUser($this);
         }
 
         return $this;
@@ -332,8 +247,8 @@ class Utilisateur
     {
         if ($this->immobilier->removeElement($immobilier)) {
             // set the owning side to null (unless already changed)
-            if ($immobilier->getUtilisateur() === $this) {
-                $immobilier->setUtilisateur(null);
+            if ($immobilier->getUser() === $this) {
+                $immobilier->setUser(null);
             }
         }
 
@@ -354,7 +269,7 @@ class Utilisateur
     {
         if (!$this->reservation->contains($reservation)) {
             $this->reservation->add($reservation);
-            $reservation->setUtilisateur($this);
+            $reservation->setUser($this);
         }
 
         return $this;
@@ -364,8 +279,8 @@ class Utilisateur
     {
         if ($this->reservation->removeElement($reservation)) {
             // set the owning side to null (unless already changed)
-            if ($reservation->getUtilisateur() === $this) {
-                $reservation->setUtilisateur(null);
+            if ($reservation->getUser() === $this) {
+                $reservation->setUser(null);
             }
         }
 
@@ -444,7 +359,7 @@ class Utilisateur
     {
         if (!$this->avis->contains($avi)) {
             $this->avis->add($avi);
-            $avi->setUtilisateur($this);
+            $avi->setUser($this);
         }
 
         return $this;
@@ -454,15 +369,13 @@ class Utilisateur
     {
         if ($this->avis->removeElement($avi)) {
             // set the owning side to null (unless already changed)
-            if ($avi->getUtilisateur() === $this) {
-                $avi->setUtilisateur(null);
+            if ($avi->getUser() === $this) {
+                $avi->setUser(null);
             }
         }
 
         return $this;
     }
-
-
 
 
 

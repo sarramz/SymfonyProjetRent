@@ -1,0 +1,160 @@
+/* Global Styles */
+body {
+    font-family: 'Jost', sans-serif;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    color: #fff;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.auth-box {
+    width: 100%;
+    max-width: 400px;
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+/* Title styling */
+h1 {
+    text-align: center;
+    color: #333;
+    font-size: 2.2em;
+    margin-bottom: 20px;
+}
+
+/* Form Group Styling */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 1.1em;
+    transition: border-color 0.3s ease;
+    background-color: #f7f7f7;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    border-color: #2575fc;
+    outline: none;
+    background-color: #fff;
+}
+
+/* Custom checkbox styling */
+.form-check {
+    display: flex;
+    align-items: center;
+}
+
+.form-check-input {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    cursor: pointer;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.form-check-input:checked {
+    background-color: #2575fc;
+    border-color: #2575fc;
+}
+
+.form-check-label {
+    color: #333;
+    font-size: 1.1em;
+    cursor: pointer;
+}
+
+/* Custom select dropdown styling */
+.custom-select {
+    width: 100%;
+    padding: 15px;
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1.1em;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/e2/Arrow-down-2.png');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 18px;
+}
+
+/* Button Styling */
+button {
+    width: 100%;
+    padding: 12px;
+    background: #2575fc;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background: #6a11cb;
+}
+
+/* Form header */
+form h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Alert for errors */
+.alert-danger {
+    color: #f44336;
+    background-color: #ffebee;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-size: 1.1em;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .auth-box {
+        width: 90%;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+}
+
+/* Animation for form appearance */
+@keyframes fadeIn {
+    0% {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

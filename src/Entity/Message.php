@@ -21,10 +21,10 @@ class Message
     private ?\DateTimeInterface $date_envoi = null;
 
     #[ORM\ManyToOne(inversedBy: 'sentmessages')]
-    private ?Utilisateur $sender = null;
+    private ?User $sender = null;
 
     #[ORM\ManyToOne(inversedBy: 'recivedmessages')]
-    private ?Utilisateur $reciver = null;
+    private ?User $reciver = null;
 
 
     public function getId(): ?int
@@ -35,6 +35,7 @@ class Message
 
     public function getContenu(): ?string
     {
+
         return $this->contenu;
     }
 
@@ -57,24 +58,24 @@ class Message
         return $this;
     }
 
-    public function getSender(): ?Utilisateur
+    public function getSender(): ?User
     {
         return $this->sender;
     }
 
-    public function setSender(?Utilisateur $sender): static
+    public function setSender(?User $sender): static
     {
         $this->sender = $sender;
 
         return $this;
     }
 
-    public function getReciver(): ?Utilisateur
+    public function getReciver(): ?User
     {
         return $this->reciver;
     }
 
-    public function setReciver(?Utilisateur $reciver): static
+    public function setReciver(?User $reciver): static
     {
         $this->reciver = $reciver;
 

@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Immobilier{% endblock %}
+
+{% block body %}
+    <h1>Immobilier</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ immobilier.id }}</td>
+            </tr>
+            <tr>
+                <th>Prix</th>
+                <td>{{ immobilier.prix }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ immobilier.description }}</td>
+            </tr>
+            <tr>
+                <th>Adresse</th>
+                <td>{{ immobilier.adresse }}</td>
+            </tr>
+            <tr>
+                <th>Ville</th>
+                <td>{{ immobilier.ville }}</td>
+            </tr>
+            <tr>
+                <th>Region</th>
+                <td>{{ immobilier.region }}</td>
+            </tr>
+            <tr>
+                <th>Nbr_chambres</th>
+                <td>{{ immobilier.nbrChambres }}</td>
+            </tr>
+            <tr>
+                <th>Statut</th>
+                <td>{{ immobilier.statut }}</td>
+            </tr>
+            <tr>
+                <th>Image</th>
+                <td><img src="{{ asset('images/' ~ immobilier.image) }}" alt="Image de l'immobilier" style="max-width: 100px; max-height: 100px;"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_immobilier_index') }}">back to list</a>
+
+    <a href="{{ path('app_immobilier_edit', {'id': immobilier.id}) }}">edit</a>
+
+    {{ include('immobilier/_delete_form.html.twig') }}
+{% endblock %}

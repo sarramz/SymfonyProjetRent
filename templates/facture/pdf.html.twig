@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facture {{ facture.id }}</title>
+</head>
+<body>
+<h1>Facture n° {{ facture.id }}</h1>
+<p>Date: {{ facture.date|date('Y-m-d') }}</p>
+<p>Montant HT: {{ facture.montantHT }} EUR</p>
+<p>TVA (20%): {{ facture.TVA }} EUR</p>
+<p>Contenu: {{ facture.contenu }}</p>
+</body>
+</html>
