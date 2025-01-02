@@ -1,49 +1,48 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Immobilier index{% endblock %}
+{% block title %}Liste des biens immobiliers{% endblock %}
 
 {% block body %}
-    <h1>Immobilier index</h1>
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Liste des biens immobiliers</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Prix</th>
-                <th>Description</th>
-                <th>Adresse</th>
-                <th>Ville</th>
-                <th>Region</th>
-                <th>Nbr_chambres</th>
-                <th>Statut</th>
-                <th>Image</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for immobilier in immobiliers %}
-            <tr>
-                <td>{{ immobilier.id }}</td>
-                <td>{{ immobilier.prix }}</td>
-                <td>{{ immobilier.description }}</td>
-                <td>{{ immobilier.adresse }}</td>
-                <td>{{ immobilier.ville }}</td>
-                <td>{{ immobilier.region }}</td>
-                <td>{{ immobilier.nbrChambres }}</td>
-                <td>{{ immobilier.statut }}</td>
-                <td><img src="{{ asset('images/' ~ immobilier.image) }}" alt="Image de l'immobilier" style="max-width: 100px; max-height: 100px;"></td>
-                <td>
-                    <a href="{{ path('app_immobilier_show', {'id': immobilier.id}) }}">show</a>
-                    <a href="{{ path('app_immobilier_edit', {'id': immobilier.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="10">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <div class="row">
+            {% for immobilier in immobiliers %}
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm">
+                        <img src="{{ asset('images/' ~ immobilier.image) }}" class="card-img-top" alt="Image de l'immobilier">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ immobilier.description }}</h5>
+                            <p class="card-text">
+                                <strong>Prix:</strong> {{ immobilier.prix }} €<br>
+                                <strong>Adresse:</strong> {{ immobilier.adresse }}<br>
+                                <strong>Ville:</strong> {{ immobilier.ville }}
+                            </p>
+                            <div class="d-flex justify-content-between">
 
-    <a href="{{ path('app_immobilierGet_new') }}">Create new</a>
+                                <a href="{{ path('app_immobilier_show', {'id': immobilier.id}) }}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-eye"></i> Voir
+                                </a>
+                                <a href="{{ path('app_immobilier_edit', {'id': immobilier.id}) }}" class="btn btn-secondary btn-sm">
+                                    <i class="fas fa-edit"></i> Modifier
+                                </a>
+                                <a href="{{ path('app_avis_index', {'immobilierId': immobilier.id}) }}" class="btn btn-info btn-sm">
+                                    <i class="fas fa-comments"></i> Avis
+                                </a>
+                                <strong>Avis:</strong> {{ immobilier.avis|length }}
+
+                                <a href="{{ path('app_avis_get_new', {'immobilierId': immobilier.id}) }}" class="btn btn-success btn-sm">
+                                    <i class="fas fa-comment-alt"></i> Ajouter un avis
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <p class="text-center">Aucun bien immobilier trouvé.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}

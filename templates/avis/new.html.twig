@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un avis{% endblock %}
+
+{% block body %}
+    <h1>Ajouter un avis</h1>
+
+    {% if immobiliers is empty %}
+        <p>Aucun immobilier disponible pour commenter.</p>
+    {% else %}
+        <form action="{{ path('app_avis_new') }}" method="post">
+            {% if immobilier %}
+                <input type="hidden" name="immobilier_id" value="{{ immobilier.id }}">
+                <p>Commenter l'immobilier : <strong>{{ immobilier.description }}</strong></p>
+            {% else %}
+                <label for="immobilier_id">Choisir un immobilier :</label>
+                <select name="immobilier_id" id="immobilier_id" required>
+                    <option value="">Sélectionnez un immobilier</option>
+                    {% for imm in immobiliers %}
+                        <option value="{{ imm.id }}">{{ imm.description }}</option>
+                    {% endfor %}
+                </select>
+            {% endif %}
+
+            <div>
+                <label for="contenu">Contenu de l'avis :</label>
+                <textarea name="contenu" id="contenu" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-paper-plane"></i> Soumettre
+            </button>
+        </form>
+    {% endif %}
+
+    <a href="{{ path('app_immobilier_index') }}">Retour à la liste</a>
+{% endblock %}

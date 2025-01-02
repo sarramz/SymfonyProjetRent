@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Tableau de bord Administrateur</h1>
+    <p>Bienvenue, {{ app.user.email }}</p>
+
+    <div class="dashboard-stats">
+        <div class="stat-box">
+            <h3>Utilisateurs</h3>
+            <p>{{ userCount }}</p>
+        </div>
+        <div class="stat-box">
+            <h3>Appartements</h3>
+            <p>{{ immobilierCount }}</p>
+        </div>
+        <div class="stat-box">
+            <h3>Réservations</h3>
+            <p>{{ reservationCount }}</p>
+        </div>
+    </div>
+
+    <a href="{{ path('admin_users') }}" class="btn btn-primary">Voir les utilisateurs</a>
+    <a href="{{ path('admin_immobilier') }}" class="btn btn-primary">Voir les appartements</a>
+    <a href="{{ path('admin_reservations') }}" class="btn btn-primary">Voir les réservations</a>
+
+    <a href="{{ path('app_logout') }}" class="btn btn-danger">Déconnexion</a>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .dashboard-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            border: 1px solid #ddd;
+            padding: 20px;
+            width: 25%;
+            text-align: center;
+            background-color: #f9f9f9;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-box h3 {
+            font-size: 1.5em;
+            color: #333;
+        }
+
+        .stat-box p {
+            font-size: 2em;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007BFF;
+            text-decoration: none;
+        }
+
+        .btn-danger {
+            background-color: #FF5733;
+        }
+
+        .btn-primary:hover, .btn-danger:hover {
+            opacity: 0.8;
+        }
+    </style>
+{% endblock %}

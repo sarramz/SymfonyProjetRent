@@ -27,9 +27,11 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Hachage du mot de passe
-            $user->setPassword(
-                $passwordHasher->hashPassword($user, $form->get('plainPassword')->getData())
-            );
+            $plainPassword = $form->get('plainPassword')->getData();
+            if ($plainPassword) {
+                $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
+                $user->setPassword($hashedPassword);
+            }
 
             // Attribution d'un rôle par défaut
             $user->setRoles(['ROLE_USER']);

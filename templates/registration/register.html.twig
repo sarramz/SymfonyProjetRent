@@ -16,6 +16,12 @@
 
             {{ form_start(registrationForm) }}
             <div class="form-group">
+                {{ form_row(registrationForm.firstName, {'attr': {'class': 'form-control', 'placeholder': 'First Name'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(registrationForm.lastName, {'attr': {'class': 'form-control', 'placeholder': 'Last Name'}}) }}
+            </div>
+            <div class="form-group">
                 {{ form_row(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'}}) }}
             </div>
             <div class="form-group">
@@ -31,13 +37,13 @@
                 }) }}
             </div>
             <div class="form-group form-check">
-    {{ form_row(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
-    <label class="form-check-label" for="registrationForm_agreeTerms">
-        I agree to the terms
-    </label>
-           </div>
+                {{ form_row(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+                <label class="form-check-label" for="registrationForm_agreeTerms">
+                    I agree to the terms
+                </label>
+            </div>
             <button type="submit" class="btn btn-primary">Register</button>
             {{ form_end(registrationForm) }}
-            </div>
         </div>
+    </div>
 {% endblock %}

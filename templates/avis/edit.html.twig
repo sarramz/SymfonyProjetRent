@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Éditer un Avis{% endblock %}
+
+{% block body %}
+    <h1>Éditer un Avis</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+
+    <form action="{{ path('app_avis_edit', { id: avis.id }) }}" method="post">
+        <div class="mb-3">
+            <label for="immobilier_id" class="form-label">Immobilier</label>
+            <select id="immobilier_id" name="immobilier_id" class="form-select" required>
+                {% for immobilier in immobiliers %}
+                    <option value="{{ immobilier.id }}" {{ immobilier.id == avis.immobilier.id ? 'selected' : '' }}>
+                        {{ immobilier.description }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="contenu" class="form-label">Votre Avis</label>
+            <textarea id="contenu" name="contenu" class="form-control" rows="5" required>{{ avis.contenu }}</textarea>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Mettre à jour</button>
+            <a href="{{ path('app_avis_index') }}" class="btn btn-secondary">Annuler</a>
+        </div>
+    </form>
+{% endblock %}
