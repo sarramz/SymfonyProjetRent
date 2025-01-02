@@ -22,7 +22,12 @@
     <a href="{{ path('admin_users') }}" class="btn btn-primary">Voir les utilisateurs</a>
     <a href="{{ path('admin_immobilier') }}" class="btn btn-primary">Voir les appartements</a>
     <a href="{{ path('admin_reservations') }}" class="btn btn-primary">Voir les réservations</a>
-
+    <a href="{{ path('app_reclamation_index') }}" class="btn btn-primary">
+        <i class="fas fa-list-alt"></i> Gérer les Réclamations
+    </a>
+    <a href="{{ path('app_avis_index') }}" class="btn btn-primary">
+        <i class="fas fa-list-alt"></i> Gérer les Avis
+    </a>
     <a href="{{ path('app_logout') }}" class="btn btn-danger">Déconnexion</a>
 {% endblock %}
 
