@@ -23,6 +23,12 @@
                         <td>{{ reclamation.user.email }}</td>
                         <td>{{ reclamation.contenu }}</td>
                         <td>{{ reclamation.date|date('d/m/Y') }}</td>
+                        <!--  <td>
+    {# <form method="post" action="{{ path('app_notification_send', { id: reclamation.id }) }}">
+        <button type="submit" class="btn btn-primary btn-sm">
+            Envoyer Notification
+        </button>
+    </form> #}</td> -->
                     </tr>
                 {% endfor %}
                 </tbody>

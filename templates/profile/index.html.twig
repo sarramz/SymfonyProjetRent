@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Mon Profil</h1>
+        {% if user %}
+            <h2>Bienvenue, {{ user.firstName }} {{ user.lastName }}</h2>
+
+            {% if user.profilePicture %}
+                <img src="{{ asset('images/' ~ user.profilePicture) }}" alt="Photo de profil" class="rounded mb-3" width="150">
+            {% endif %}
+
+            <form method="post" action="{{ path('app_profile') }}" enctype="multipart/form-data">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('profile_update') }}">
+                <div class="mb-3">
+                    <label for="firstName">Prénom</label>
+                    <input type="text" name="firstName" class="form-control" value="{{ user.firstName }}">
+                    {% if errors.firstName is defined %}
+                        <div class="text-danger">{{ errors.firstName }}</div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <label for="lastName">Nom</label>
+                    <input type="text" name="lastName" class="form-control" value="{{ user.lastName }}">
+                    {% if errors.lastName is defined %}
+                        <div class="text-danger">{{ errors.lastName }}</div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <label for="profilePicture">Photo de profil</label>
+                    <input type="file" name="profilePicture" class="form-control">
+                    {% if errors.profilePicture is defined %}
+                        <div class="text-danger">{{ errors.profilePicture }}</div>
+                    {% endif %}
+                </div>
+                <button class="btn btn-primary">Mettre à jour</button>
+            </form>
+
+            <hr>
+
+            <h2>Mes Réclamations</h2>
+            <ul class="list-group">
+                {% if reclamations is defined and reclamations is not empty %}
+                    {% for reclamation in reclamations %}
+                        <li class="list-group-item">Réclamation #{{ reclamation.id }} : {{ reclamation.contenu }}</li>
+                    {% endfor %}
+                {% else %}
+                    <li class="list-group-item">Aucune réclamation disponible.</li>
+                {% endif %}
+            </ul>
+
+        {% else %}
+            <p>Utilisateur non connecté.</p>
+        {% endif %}
+    </div>
+{% endblock %}

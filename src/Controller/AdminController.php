@@ -41,23 +41,19 @@ class AdminController extends AbstractController
             'users' => $users,
         ]);
     }
-    #[Route('/immobilier', name: 'admin_immobilier')]
-    public function listImmobilier(EntityManagerInterface $entityManager): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
-        $immobilierList = $entityManager->getRepository(Immobilier::class)->findAll();
 
-        return $this->render('admin/immobilier.html.twig', [
-            'immobilierList' => $immobilierList,
-        ]);
-    }
     #[Route('/reservations', name: 'admin_reservations')]
     public function listReservations(EntityManagerInterface $entityManager): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
-        $reservations = $entityManager->getRepository(Reservation::class)->findAll();
+        try {
+            $reservations = $entityManager->getRepository(Reservation::class)->findAll();
+        } catch (\Exception $e) {
+            $this->addFlash('danger', 'Erreur lors de la récupération des réservations.');
+            $reservations = [];
+        }
 
         return $this->render('admin/reservations.html.twig', [
             'reservations' => $reservations,

@@ -42,6 +42,21 @@ class Immobilier
     #[ORM\ManyToOne(inversedBy: 'immobilier')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $User = null;
+    #[ORM\Column(type: 'datetime')]
+    private ?\DateTimeInterface $createdAt = null;
+
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
 
     /**
      * @var Collection<int, Avis>
@@ -108,6 +123,7 @@ class Immobilier
 
         return $this;
     }
+
 
     public function getVille(): ?string
     {

@@ -31,6 +31,31 @@
                             </a>
                         </li>
                     {% endif %}
+                    {% if app.user %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                                <img src="{{ asset('images/' ~ app.user.profilePicture) }}" alt="User Icon" class="rounded-circle me-2" width="30" height="30">
+
+                                {{ app.user.firstName }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{{ path('app_profile') }}">Mon Profil</a></li>
+                                <li><a class="dropdown-item" href="{{ path('app_logout') }}">Se Déconnecter</a></li>
+                            </ul>
+                        </li>
+                        <!-- <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-bell"></i> Notifications
+                                <span class="badge bg-danger" id="notification-count">0</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" id="notification-list">
+                                <li class="dropdown-item">Aucune notification.</li>
+                            </ul>
+                        </li> -->
+
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{{ path('app_login') }}">Se Connecter</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -41,6 +66,28 @@
     {% block body %}{% endblock %}
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js">
+// const notificationCount = document.getElementById('notification-count');
+// const notificationList = document.getElementById('notification-list');
+
+// Fonction pour mettre à jour les notifications
+// function fetchNotifications() {
+// fetch('/user/notifications')
+//     .then(response => response.json())
+//     .then(data => {
+//         notificationCount.textContent = data.length;
+//         notificationList.innerHTML = data.length > 0 ?
+//             data.map(notification => `<li class="dropdown-item">${notification.contenu}</li>`).join('') :
+//             '<li class="dropdown-item">Aucune notification.</li>';
+//     })
+//     .catch(error => console.error('Erreur lors de la récupération des notifications :', error));
+// }
+
+// Récupération initiale
+// fetchNotifications();
+
+// Mise à jour toutes les 5 secondes
+// setInterval(fetchNotifications, 5000);
+</script>
 </body>
 </html>

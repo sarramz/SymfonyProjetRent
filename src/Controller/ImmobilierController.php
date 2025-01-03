@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/immobilier')]
 final class ImmobilierController extends AbstractController
@@ -31,6 +32,7 @@ final class ImmobilierController extends AbstractController
 
 
     #[Route('/new', name: 'app_immobilier_new', methods: [ 'POST'])]
+    #[IsGranted('ROLE_USER')]
     public function new(Request $request, EntityManagerInterface $entityManager,Security $security): Response
     {
         $user = $security->getUser();
@@ -64,7 +66,7 @@ final class ImmobilierController extends AbstractController
         } else {
             $immobilier->setImage('');
         }
-
+        $immobilier->setCreatedAt(new \DateTime());
         $immobilier->setUser($user);
 
       //  $form = $this->createForm(ImmobilierType::class, $immobilier);

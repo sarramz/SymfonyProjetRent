@@ -14,6 +14,26 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/reclamation')]
 final class ReclamationController extends AbstractController
 {
+
+    // #[Route('/reclamation/send-notification/{id}', name: 'app_notification_send', methods: ['POST'])]
+// public function sendNotification(
+//     int $id,
+//     NotificationService $notificationService
+// ): Response {
+//     $reclamation = $this->getDoctrine()->getRepository(Reclamation::class)->find($id);
+
+//     if (!$reclamation) {
+//         throw $this->createNotFoundException('Réclamation non trouvée.');
+//     }
+
+//     $user = $reclamation->getUser();
+//     $contenu = "Votre réclamation (#{$id}) a été prise en compte.";
+//     $notificationService->createNotification($contenu, $user);
+
+//     $this->addFlash('success', 'Notification envoyée avec succès.');
+
+//     return $this->redirectToRoute('app_reclamation_index');
+// }
     #[Route('/', name: 'app_reclamation_index', methods: ['GET'])]
     public function index(ReclamationRepository $reclamationRepository): Response
     {
