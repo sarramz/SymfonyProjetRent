@@ -26,21 +26,21 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Hachage du mot de passe
+
             $plainPassword = $form->get('plainPassword')->getData();
             if ($plainPassword) {
                 $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
                 $user->setPassword($hashedPassword);
             }
 
-            // Attribution d'un rôle par défaut
+
             $user->setRoles(['ROLE_USER']);
 
-            // Enregistrement de l'utilisateur dans la base de données
+
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // Authentification de l'utilisateur après inscription
+
            // return $userAuthenticator->authenticateUser($user, $authenticator,  $request);
             $this->addFlash('success', 'Votre compte a été créé avec succès. Vous pouvez maintenant vous connecter.');
             return $this->redirectToRoute('app_login');

@@ -104,6 +104,7 @@ final class ReclamationController extends AbstractController
         ]);
     }
 
+
     #[Route('/{id}', name: 'app_reclamation_delete', methods: ['POST'])]
     public function delete(Request $request, Reclamation $reclamation, EntityManagerInterface $entityManager): Response
     {

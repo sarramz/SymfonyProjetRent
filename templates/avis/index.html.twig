@@ -7,6 +7,7 @@
         Liste des avis
     {% endif %}
 {% endblock %}
+
 {% block body %}
     <div class="container my-5">
         {% if immobilier is defined and immobilier %}
@@ -16,21 +17,27 @@
         {% endif %}
 
         {% if avis is not empty %}
-            <div class="list-group">
+            <div class="row">
                 {% for avis in avis %}
-                    <div class="list-group-item">
-                        <p class="mb-1">{{ avis.contenu }}</p>
-                        <small class="text-muted">Publié le {{ avis.date|date('d/m/Y') }}</small>
-                        <div class="d-flex justify-content-end mt-2">
-                            <a href="{{ path('app_avis_edit', {'id': avis.id}) }}" class="btn btn-sm btn-secondary me-2">
-                                <i class="fas fa-edit"></i> Modifier
-                            </a>
-                            <form method="post" action="{{ path('app_avis_delete', {'id': avis.id}) }}" onsubmit="return confirm('Êtes-vous sûr ?');">
-                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ avis.id) }}">
-                                <button class="btn btn-sm btn-danger">
-                                    <i class="fas fa-trash-alt"></i> Supprimer
-                                </button>
-                            </form>
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-body">
+                                <p class="card-text mb-2">{{ avis.contenu }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">Publié le {{ avis.date|date('d/m/Y') }}</small>
+                                    <div class="d-flex">
+                                        <a href="{{ path('app_avis_edit', {'id': avis.id}) }}" class="btn btn-outline-secondary btn-sm me-2">
+                                            <i class="fas fa-edit"></i> Modifier
+                                        </a>
+                                        <form method="post" action="{{ path('app_avis_delete', {'id': avis.id}) }}" onsubmit="return confirm('Êtes-vous sûr ?');">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ avis.id) }}">
+                                            <button class="btn btn-outline-danger btn-sm">
+                                                <i class="fas fa-trash-alt"></i> Supprimer
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}
@@ -44,7 +51,26 @@
                 {% endif %}
             </p>
         {% endif %}
-        <a href="{{ path('app_immobilier_index') }}">Retour à la liste</a>
-    </div>
 
+        <div class="text-center mt-4">
+            <a href="{{ path('app_immobilier_index') }}" class="btn btn-primary">
+                Retour à la liste
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        // Optional: Add smooth scrolling or animation effects here if needed
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.classList.add('animate__animated', 'animate__pulse');
+            });
+            card.addEventListener('mouseleave', () => {
+                card.classList.remove('animate__animated', 'animate__pulse');
+            });
+        });
+    </script>
 {% endblock %}

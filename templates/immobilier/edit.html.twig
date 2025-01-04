@@ -3,67 +3,125 @@
 {% block title %}Edit Immobilier{% endblock %}
 
 {% block body %}
-    <h1 class="form-title">Edit Immobilier</h1>
+    <div class="container my-5">
+        <h1 class="form-title text-center mb-4">Edit Immobilier</h1>
 
-    <form id="immobilierForm" class="styled-form" action="{{ path('app_immobilier_edit', {id: immobilier.id}) }}" method="POST" enctype="multipart/form-data">
-        <div class="form-group">
-            <label for="immobilierPrix">Prix</label>
-            <input type="number" id="immobilierPrix" name="prix" placeholder="Enter price" required class="form-control" value="{{ immobilier.prix }}">
-        </div>
+        <form id="immobilierForm" class="styled-form" action="{{ path('app_immobilier_edit', {id: immobilier.id}) }}" method="POST" enctype="multipart/form-data" style="border: 1px solid #ddd; padding: 30px; background-color: #f9f9f9; border-radius: 10px;">
 
-        <div class="form-group">
-            <label for="immobilierDescription">Description</label>
-            <textarea id="immobilierDescription" name="description" rows="4" placeholder="Enter description" required class="form-control">{{ immobilier.description }}</textarea>
-        </div>
+            <div class="form-group mb-4">
+                <label for="immobilierPrix" class="form-label">Prix</label>
+                <input type="number" id="immobilierPrix" name="prix" placeholder="Enter price" required class="form-control" value="{{ immobilier.prix }}">
+            </div>
 
-        <div class="form-group">
-            <label for="immobilierAdresse">Adresse</label>
-            <input type="text" id="immobilierAdresse" name="adresse" placeholder="Enter address" required class="form-control" value="{{ immobilier.adresse }}">
-        </div>
+            <div class="form-group mb-4">
+                <label for="immobilierDescription" class="form-label">Description</label>
+                <textarea id="immobilierDescription" name="description" rows="4" placeholder="Enter description" required class="form-control">{{ immobilier.description }}</textarea>
+            </div>
 
-        <div class="form-group">
-            <label for="immobilierVille">Ville</label>
-            <input type="text" id="immobilierVille" name="ville" placeholder="Enter city" required class="form-control" value="{{ immobilier.ville }}">
-        </div>
+            <div class="form-group mb-4">
+                <label for="immobilierAdresse" class="form-label">Adresse</label>
+                <input type="text" id="immobilierAdresse" name="adresse" placeholder="Enter address" required class="form-control" value="{{ immobilier.adresse }}">
+            </div>
 
-        <div class="form-group">
-            <label for="immobilierRegion">Région</label>
-            <input type="text" id="immobilierRegion" name="region" placeholder="Enter region" required class="form-control" value="{{ immobilier.region }}">
-        </div>
+            <div class="form-group mb-4">
+                <label for="immobilierVille" class="form-label">Ville</label>
+                <input type="text" id="immobilierVille" name="ville" placeholder="Enter city" required class="form-control" value="{{ immobilier.ville }}">
+            </div>
 
-        <div class="form-group">
-            <label for="immobilierNbrChambres">Nombre de Chambres</label>
-            <input type="number" id="immobilierNbrChambres" name="nbr_chambres" placeholder="Enter number of rooms" required class="form-control" value="{{ immobilier.nbrChambres }}">
-        </div>
+            <div class="form-group mb-4">
+                <label for="immobilierRegion" class="form-label">Région</label>
+                <input type="text" id="immobilierRegion" name="region" placeholder="Enter region" required class="form-control" value="{{ immobilier.region }}">
+            </div>
 
-        <div class="form-group">
-            <label for="immobilierStatut">Statut</label>
-            <select id="immobilierStatut" name="statut" required class="form-control">
-                <option value="1" {% if immobilier.statut == 1 %}selected{% endif %}>Disponible</option>
-                <option value="0" {% if immobilier.statut == 0 %}selected{% endif %}>Non Disponible</option>
-            </select>
-        </div>
+            <div class="form-group mb-4">
+                <label for="immobilierNbrChambres" class="form-label">Nombre de Chambres</label>
+                <input type="number" id="immobilierNbrChambres" name="nbr_chambres" placeholder="Enter number of rooms" required class="form-control" value="{{ immobilier.nbrChambres }}">
+            </div>
 
-        <div class="form-group">
-            <label for="immobilierImage">Image</label>
-            {% if immobilier.image %}
-                <div>
-                    <img src="{{ asset('images/' ~ immobilier.image) }}" alt="Current Image" style="max-width: 100%; height: auto; margin-bottom: 10px;">
-                </div>
-            {% endif %}
-            <input type="file" id="immobilierImage" name="image" class="form-control">
-        </div>
+            <div class="form-group mb-4">
+                <label for="immobilierStatut" class="form-label">Statut</label>
+                <select id="immobilierStatut" name="statut" required class="form-select">
+                    <option value="1" {% if immobilier.statut == 1 %}selected{% endif %}>Disponible</option>
+                    <option value="0" {% if immobilier.statut == 0 %}selected{% endif %}>Non Disponible</option>
+                </select>
+            </div>
 
-        <button type="submit" class="btn btn-primary">
-            <i class="fas fa-save"></i> Save Changes
-        </button>
-    </form>
+            <div class="form-group mb-4">
+                <label for="immobilierImage" class="form-label">Image</label>
+                {% if immobilier.image %}
+                    <div>
+                        <img src="{{ asset('images/' ~ immobilier.image) }}" alt="Current Image" style="max-width: 100%; height: auto; margin-bottom: 10px;">
+                    </div>
+                {% endif %}
+                <input type="file" id="immobilierImage" name="image" class="form-control">
+            </div>
 
-    <a href="{{ path('app_immobilier_index') }}" class="btn btn-secondary back-button">Back to list</a>
+            <div class="d-flex justify-content-between mt-4">
+                <button type="submit" class="btn btn-success w-48">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <a href="{{ path('app_immobilier_index') }}" class="btn btn-secondary w-48">
+                    <i class="fas fa-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </form>
+    </div>
 {% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
+    <style>
+        .form-label {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .styled-form .form-control {
+            font-size: 1.1em;
+            padding: 12px;
+        }
+
+        .btn {
+            font-size: 16px;
+            padding: 12px 24px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn-success:hover, .btn-secondary:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+
+        .alert {
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .d-flex {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .w-48 {
+            width: 48%;
+        }
+    </style>
 {% endblock %}
 
 {% block javascripts %}

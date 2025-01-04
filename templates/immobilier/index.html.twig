@@ -4,48 +4,144 @@
 
 {% block body %}
     <div class="container my-5">
-        <h1 class="text-center mb-4">Liste des biens immobiliers</h1>
+        <h1 class="text-center mb-5 text-primary fw-bold">Découvrez Nos Biens Immobiliers</h1>
 
-        <div class="row">
-            {% for immobilier in immobiliers %}
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img src="{{ asset('images/' ~ immobilier.image) }}" class="card-img-top" alt="Image de l'immobilier">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ immobilier.description }}</h5>
-                            <p class="card-text">
-                                <strong>Prix:</strong> {{ immobilier.prix }} DT<br>
-                                <strong>Adresse:</strong> {{ immobilier.adresse }}<br>
-                                <strong>Ville:</strong> {{ immobilier.ville }}
-                            </p>
-                            <div class="d-flex justify-content-between">
-                                <a href="{{ path('app_immobilier_show', {'id': immobilier.id}) }}" class="btn btn-primary btn-sm">
-                                    <i class="fas fa-eye"></i> Voir
-                                </a>
-                                <a href="{{ path('app_immobilier_edit', {'id': immobilier.id}) }}" class="btn btn-secondary btn-sm">
-                                    <i class="fas fa-edit"></i> Modifier
-                                </a>
-                                <a href="{{ path('app_avis_index', {'immobilierId': immobilier.id}) }}" class="btn btn-info btn-sm">
-                                    <i class="fas fa-comments"></i> Avis
-                                </a>
-                                <a href="{{ path('app_avis_get_new', {'immobilierId': immobilier.id}) }}" class="btn btn-success btn-sm">
-                                    <i class="fas fa-comment-alt"></i> Ajouter un avis
-                                </a>
-                                <form method="post" action="{{ path('app_immobilier_delete', {'id': immobilier.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer ce bien ?');">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ immobilier.id) }}">
-                                    <button class="btn btn-danger btn-sm">
-                                        <i class="fas fa-trash-alt"></i> Supprimer
-                                    </button>
-                                </form>
+        {% if immobiliers|length > 0 %}
+            <div class="row g-4">
+                {% for immobilier in immobiliers %}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card border-0 shadow-lg h-100 rounded-3 overflow-hidden">
+                            <div class="position-relative">
+                                <img src="{{ asset('images/' ~ immobilier.image) }}" class="card-img-top" alt="Image de l'immobilier" style="height: 200px; object-fit: cover;">
+                                <span class="badge bg-primary position-absolute top-0 start-0 m-3 shadow-sm rounded-pill px-3 py-2">
+                                    {{ immobilier.prix }} DT
+                                </span>
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title text-truncate fw-bold text-secondary">{{ immobilier.description }}</h5>
+                                <p class="card-text text-muted small">
+                                    <i class="fas fa-map-marker-alt text-danger"></i> {{ immobilier.adresse }}, {{ immobilier.ville }}
+                                </p>
+
+                                <!-- Boutons affichés horizontalement -->
+                                <div class="mt-3 d-flex flex-wrap justify-content-between align-items-center">
+                                    <a href="{{ path('app_immobilier_show', {'id': immobilier.id}) }}" class="btn btn-primary btn-sm modern-btn shadow-sm">
+                                        <i class="fas fa-eye"></i> Voir
+                                    </a>
+                                    <a href="{{ path('app_immobilier_edit', {'id': immobilier.id}) }}" class="btn btn-secondary btn-sm modern-btn shadow-sm">
+                                        <i class="fas fa-edit"></i> Modifier
+                                    </a>
+                                    <a href="{{ path('app_avis_index', {'immobilierId': immobilier.id}) }}" class="btn btn-info btn-sm modern-btn shadow-sm">
+                                        <i class="fas fa-comments"></i> Avis
+                                    </a>
+                                    <a href="{{ path('app_avis_get_new', {'immobilierId': immobilier.id}) }}" class="btn btn-success btn-sm modern-btn shadow-sm">
+                                        <i class="fas fa-comment-alt"></i> Avis +
+                                    </a>
+
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            {% else %}
-                <div class="col-12">
-                    <p class="text-center">Aucun bien immobilier trouvé.</p>
-                </div>
-            {% endfor %}
-        </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info text-center">
+                <p class="fs-5">Aucun bien immobilier disponible pour le moment. Revenez plus tard !</p>
+            </div>
+        {% endif %}
     </div>
+
+    <style>
+        /* Animation des cartes au survol */
+        .card {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Badge prix */
+        .badge {
+            font-size: 1rem;
+            padding: 0.6em 1em;
+            background-color: rgba(74, 144, 226, 0.9);
+            font-weight: bold;
+            border-radius: 30px;
+        }
+
+        /* Texte tranché pour éviter les débordements */
+        .text-truncate {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        /* Boutons horizontaux */
+        .d-flex > * {
+            margin: 5px 2px; /* Espacement entre les boutons */
+        }
+
+        /* Style des boutons modernes */
+        .modern-btn {
+            position: relative;
+            overflow: hidden;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        /* Animation du bouton */
+        .modern-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background-color: rgba(255, 255, 255, 0.3);
+            transition: all 0.5s ease;
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        .modern-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .modern-btn:hover::before {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* Boutons spéciaux */
+        .btn-danger {
+            background-color: #e63946;
+            border: none;
+        }
+        .btn-danger:hover {
+            background-color: #d62828;
+        }
+
+        /* Animation des boutons */
+        .btn {
+            transition: transform 0.2s ease-in-out;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Responsive image styles */
+        .card-img-top {
+            transition: transform 0.3s ease;
+        }
+        .card:hover .card-img-top {
+            transform: scale(1.1);
+        }
+
+        /* Fluid card design */
+        .card-body {
+            padding: 1.5rem;
+            background-color: #fff;
+        }
+    </style>
 {% endblock %}

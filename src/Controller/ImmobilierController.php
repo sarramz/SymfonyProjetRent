@@ -130,7 +130,7 @@ final class ImmobilierController extends AbstractController
     #[Route('/{id}/edit', name: 'app_immobilier_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Immobilier $immobilier, EntityManagerInterface $entityManager): Response
     {
-        // Gestion de la soumission du formulaire
+
         if ($request->isMethod('POST')) {
             // Récupération des données du formulaire
             $prix = (float) $request->request->get('prix');
@@ -142,7 +142,7 @@ final class ImmobilierController extends AbstractController
             $statut = (int) $request->request->get('statut');
             $image = $request->files->get('image');
 
-            // Mise à jour de l'entité
+
             $immobilier->setPrix($prix);
             $immobilier->setDescription($description);
             $immobilier->setAdresse($adresse);
@@ -151,7 +151,7 @@ final class ImmobilierController extends AbstractController
             $immobilier->setNbrChambres($nbr_chambres);
             $immobilier->setStatut($statut);
 
-            // Gestion de l'image si une nouvelle est fournie
+
             if ($image) {
                 $imageName = uniqid() . '.' . $image->guessExtension();
 
@@ -162,14 +162,14 @@ final class ImmobilierController extends AbstractController
                 $immobilier->setImage($imageName);
             }
 
-            // Persistance des modifications
+
             $entityManager->flush();
 
-            // Redirection après la mise à jour
+
             return $this->redirectToRoute('app_immobilier_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        // Rendre le formulaire en GET (avec les données actuelles pré-remplies)
+
         return $this->render('immobilier/edit.html.twig', [
             'immobilier' => $immobilier,
         ]);

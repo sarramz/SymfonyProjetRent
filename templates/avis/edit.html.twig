@@ -3,35 +3,106 @@
 {% block title %}Éditer un Avis{% endblock %}
 
 {% block body %}
-    <h1>Éditer un Avis</h1>
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Éditer un Avis</h1>
 
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">{{ message }}</div>
-    {% endfor %}
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">{{ message }}</div>
-    {% endfor %}
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">{{ message }}</div>
+        {% endfor %}
 
-    <form action="{{ path('app_avis_edit', { id: avis.id }) }}" method="post">
-        <div class="mb-3">
-            <label for="immobilier_id" class="form-label">Immobilier</label>
-            <select id="immobilier_id" name="immobilier_id" class="form-select" required>
-                {% for immobilier in immobiliers %}
-                    <option value="{{ immobilier.id }}" {{ immobilier.id == avis.immobilier.id ? 'selected' : '' }}>
-                        {{ immobilier.description }}
-                    </option>
-                {% endfor %}
-            </select>
-        </div>
+        <form action="{{ path('app_avis_edit', { id: avis.id }) }}" method="post" class="p-4 border rounded shadow-sm bg-light">
+            <div class="mb-3">
+                <label for="immobilier_id" class="form-label">Immobilier</label>
+                <select id="immobilier_id" name="immobilier_id" class="form-select" required>
+                    {% for immobilier in immobiliers %}
+                        <option value="{{ immobilier.id }}" {{ immobilier.id == avis.immobilier.id ? 'selected' : '' }}>
+                            {{ immobilier.description }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
 
-        <div class="mb-3">
-            <label for="contenu" class="form-label">Votre Avis</label>
-            <textarea id="contenu" name="contenu" class="form-control" rows="5" required>{{ avis.contenu }}</textarea>
-        </div>
+            <div class="mb-3">
+                <label for="contenu" class="form-label">Votre Avis</label>
+                <textarea id="contenu" name="contenu" class="form-control" rows="5" required>{{ avis.contenu }}</textarea>
+            </div>
 
-        <div class="mt-4">
-            <button type="submit" class="btn btn-primary">Mettre à jour</button>
-            <a href="{{ path('app_avis_index') }}" class="btn btn-secondary">Annuler</a>
-        </div>
-    </form>
+            <div class="mt-4 d-flex justify-content-between">
+                <button type="submit" class="btn btn-success btn-lg w-48">Mettre à jour</button>
+                <a href="{{ path('app_avis_index') }}" class="btn btn-secondary btn-lg w-48">Annuler</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-select, .form-control {
+            font-size: 1.1em;
+            padding: 12px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .alert {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+
+        form {
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        form:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-label {
+            font-weight: 600;
+        }
+
+        .d-flex {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .w-48 {
+            width: 48%;
+        }
+    </style>
 {% endblock %}

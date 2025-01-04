@@ -3,63 +3,102 @@
 {% block title %}Immobilier{% endblock %}
 
 {% block body %}
-    <h1>Immobilier</h1>
+    <div class="container my-5">
+        <h1 class="text-center mb-5 text-primary fw-bold">Détails de l'Immobilier</h1>
 
-    <table class="table">
-        <tbody>
-        <tr>
-            <th>Id</th>
-            <td>{{ immobilier.id }}</td>
-        </tr>
-        <tr>
-            <th>Prix</th>
-            <td>{{ immobilier.prix }}</td>
-        </tr>
-        <tr>
-            <th>Description</th>
-            <td>{{ immobilier.description }}</td>
-        </tr>
-        <tr>
-            <th>Adresse</th>
-            <td>{{ immobilier.adresse }}</td>
-        </tr>
-        <tr>
-            <th>Ville</th>
-            <td>{{ immobilier.ville }}</td>
-        </tr>
-        <tr>
-            <th>Region</th>
-            <td>{{ immobilier.region }}</td>
-        </tr>
-        <tr>
-            <th>Nombre de chambres</th>
-            <td>{{ immobilier.nbrChambres }}</td>
-        </tr>
-        <tr>
-            <th>Statut</th>
-            <td>{{ immobilier.statut }}</td>
-        </tr>
-        <tr>
-            <th>Image</th>
-            <td>
-                <img src="{{ asset('images/' ~ immobilier.image) }}" alt="Image de l'immobilier" style="max-width: 100px; max-height: 100px;">
-            </td>
-        </tr>
-        <tr>
-            <th>Date de création</th>
-            <td>{{ immobilier.createdAt|date('d/m/Y H:i') }}</td>
-        </tr>
-        <tr>
-            <th> Avis</th>
-            <td>{{ immobilier.avis|length }}</td>
-        </tr>
-        </tbody>
-    </table>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card shadow-lg rounded-3">
+                    <div class="position-relative">
+                        <img src="{{ asset('images/' ~ immobilier.image) }}" class="card-img-top" alt="Image de l'immobilier" style="height: 300px; object-fit: cover; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#imageModal">
+                        <span class="badge bg-primary position-absolute top-0 start-0 m-3 shadow-sm rounded-pill px-3 py-2">
+                            {{ immobilier.prix }} DT
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-secondary">{{ immobilier.description }}</h5>
+                        <p class="card-text text-muted">
+                            <i class="fas fa-map-marker-alt text-danger"></i> {{ immobilier.adresse }}, {{ immobilier.ville }} - {{ immobilier.region }}
+                        </p>
+                        <p class="card-text"><strong>Nombre de chambres:</strong> {{ immobilier.nbrChambres }}</p>
+                        <p class="card-text"><strong>Statut:</strong> {{ immobilier.statut }}</p>
+                        <p class="card-text"><strong>Créé le:</strong> {{ immobilier.createdAt|date('d/m/Y H:i') }}</p>
+                        <p class="card-text"><strong>Avis:</strong> {{ immobilier.avis|length }} Avis</p>
+                    </div>
+                    <div class="card-footer text-end">
+                        <a href="{{ path('app_immobilier_index') }}" class="btn btn-secondary me-2">Retour à la liste</a>
+                        <a href="{{ path('app_immobilier_edit', {'id': immobilier.id}) }}" class="btn btn-primary me-2">Modifier</a>
+                        <a href="{{ path('app_avis_get_new', {'immobilierId': immobilier.id}) }}" class="btn btn-success me-2">
+                            <i class="fas fa-comment-alt"></i> Ajouter un avis
+                        </a>
+                        <form method="post" action="{{ path('app_immobilier_delete', {'id': immobilier.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer ce bien ?');" class="d-inline">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ immobilier.id) }}">
+                            <button class="btn btn-danger">
+                                <i class="fas fa-trash-alt"></i> Supprimer
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
-    <a href="{{ path('app_immobilier_index') }}" class="btn btn-secondary">Retour à la liste</a>
-    <a href="{{ path('app_immobilier_edit', {'id': immobilier.id}) }}" class="btn btn-primary">Modifier</a>
-    <a href="{{ path('app_avis_get_new', {'immobilierId': immobilier.id}) }}" class="btn btn-success btn-sm">
-        <i class="fas fa-comment-alt"></i> Ajouter un avis
-    </a>
-    {{ include('immobilier/_delete_form.html.twig') }}
+            <div class="col-md-6 d-flex flex-column align-items-center">
+                <div class="mt-4">
+                    <h5 class="text-center">Détails supplémentaires</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>Adresse:</strong> {{ immobilier.adresse }}</li>
+                        <li class="list-group-item"><strong>Ville:</strong> {{ immobilier.ville }}</li>
+                        <li class="list-group-item"><strong>Region:</strong> {{ immobilier.region }}</li>
+                        <li class="list-group-item"><strong>Nombre de chambres:</strong> {{ immobilier.nbrChambres }}</li>
+                        <li class="list-group-item"><strong>Statut:</strong> {{ immobilier.statut }}</li>
+                        <li class="list-group-item"><strong>Création:</strong> {{ immobilier.createdAt|date('d/m/Y H:i') }}</li>
+                        <li class="list-group-item"><strong>Nombre d'Avis:</strong> {{ immobilier.avis|length }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for Image Preview -->
+        <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="imageModalLabel">Image de l'immobilier</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <img src="{{ asset('images/' ~ immobilier.image) }}" class="img-fluid" alt="Image de l'immobilier">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .card {
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+            background-color: #f9f9f9;
+        }
+
+        .card-footer {
+            background-color: #fff;
+        }
+
+        /* Hover effect for image */
+        .card-img-top:hover {
+            opacity: 0.85;
+            transform: scale(1.05);
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Button hover effect */
+        .btn:hover {
+            transform: scale(1.05);
+            transition: all 0.2s ease-in-out;
+        }
+    </style>
 {% endblock %}

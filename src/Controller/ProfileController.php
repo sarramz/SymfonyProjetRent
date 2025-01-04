@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\ReservationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +19,7 @@ class ProfileController extends AbstractController
         EntityManagerInterface $entityManager,
         SluggerInterface $slugger,
         ValidatorInterface $validator,
-        ReclamationRepository $reclamationRepository
+        ReclamationRepository $reclamationRepository,ReservationRepository $reservationRepository
     ): Response
     {
         $user = $this->getUser();
@@ -29,12 +30,12 @@ class ProfileController extends AbstractController
         $errors = [];
 
         if ($request->isMethod('POST')) {
-            // Gestion des données du formulaire
+
             $firstName = $request->request->get('firstName');
             $lastName = $request->request->get('lastName');
             $profilePicture = $request->files->get('profilePicture');
 
-            // Mise à jour des données utilisateur
+
             $user->setFirstName($firstName ?: $user->getFirstName());
             $user->setLastName($lastName ?: $user->getLastName());
 
@@ -51,23 +52,25 @@ class ProfileController extends AbstractController
                 }
             }
 
-            // Validation des données
+
             $validationErrors = $validator->validate($user);
             if (count($validationErrors) > 0) {
                 foreach ($validationErrors as $error) {
                     $errors[$error->getPropertyPath()] = $error->getMessage();
                 }
             } else {
-                // Enregistrement
+
                 $entityManager->flush();
                 $this->addFlash('success', 'Profil mis à jour avec succès.');
                 return $this->redirectToRoute('app_profile');
             }
         }
         $reclamations = $reclamationRepository->findBy(['user' => $user]);
+        $reservations = $reservationRepository->findBy(['user' => $user]);
         return $this->render('profile/index.html.twig', [
             'user' => $user,
             'reclamations' => $reclamations,
+            'reservations' => $reservations,
             'errors' => $errors,
         ]);
     }

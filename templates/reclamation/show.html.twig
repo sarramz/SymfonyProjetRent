@@ -1,30 +1,56 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Reclamation{% endblock %}
+{% block title %}Détails de la Réclamation{% endblock %}
 
 {% block body %}
-    <h1>Reclamation</h1>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10 col-sm-12">
+                <div class="card shadow-lg p-4">
+                    <div class="card-body">
+                        <h2 class="text-center mb-4 text-primary animate__animated animate__fadeIn">Détails de la Réclamation #{{ reclamation.id }}</h2>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ reclamation.id }}</td>
-            </tr>
-            <tr>
-                <th>Contenu</th>
-                <td>{{ reclamation.contenu }}</td>
-            </tr>
-            <tr>
-                <th>Date</th>
-                <td>{{ reclamation.date ? reclamation.date|date('Y-m-d') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+                        <div class="mb-3">
+                            <h5 class="fw-bold">Contenu de la Réclamation</h5>
+                            <p class="animate__animated animate__fadeIn">{{ reclamation.contenu }}</p>
+                        </div>
 
-    <a href="{{ path('app_reclamation_index') }}">back to list</a>
+                        <div class="mb-3">
+                            <h5 class="fw-bold">Date de Création</h5>
+                            <p class="animate__animated animate__fadeIn">{{ reclamation.date ? reclamation.date|date('d/m/Y') : 'Non précisée' }}</p>
+                        </div>
 
-    <a href="{{ path('app_reclamation_edit', {'id': reclamation.id}) }}">edit</a>
+                        <!-- Boutons modernes et regroupés -->
+                        <div class="d-flex justify-content-center gap-3 mb-4">
+                            <a href="{{ path('app_reclamation_index') }}" class="btn btn-outline-primary px-4 py-2 rounded-pill animate__animated animate__fadeIn animate__delay-1s hover-shadow">
+                                <i class="fas fa-arrow-left me-2"></i>Retour à la liste
+                            </a>
+                            <a href="{{ path('app_reclamation_edit', {'id': reclamation.id}) }}" class="btn btn-warning px-4 py-2 rounded-pill animate__animated animate__fadeIn animate__delay-2s hover-shadow">
+                                <i class="fas fa-edit me-2"></i>Modifier
+                            </a>
+                        </div>
 
-    {{ include('reclamation/_delete_form.html.twig') }}
+                        <hr class="my-4">
+
+                        {{ include('reclamation/_delete_form.html.twig') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"></script>
+
+    <style>
+        /* Hover effect with animation for buttons */
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+        .hover-shadow {
+            transition: box-shadow 0.3s ease;
+        }
+    </style>
 {% endblock %}

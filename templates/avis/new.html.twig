@@ -3,35 +3,55 @@
 {% block title %}Ajouter un avis{% endblock %}
 
 {% block body %}
-    <h1>Ajouter un avis</h1>
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Ajouter un avis</h1>
 
-    {% if immobiliers is empty %}
-        <p>Aucun immobilier disponible pour commenter.</p>
-    {% else %}
-        <form action="{{ path('app_avis_new') }}" method="post">
-            {% if immobilier %}
-                <input type="hidden" name="immobilier_id" value="{{ immobilier.id }}">
-                <p>Commenter l'immobilier : <strong>{{ immobilier.description }}</strong></p>
-            {% else %}
-                <label for="immobilier_id">Choisir un immobilier :</label>
-                <select name="immobilier_id" id="immobilier_id" required>
-                    <option value="">Sélectionnez un immobilier</option>
-                    {% for imm in immobiliers %}
-                        <option value="{{ imm.id }}">{{ imm.description }}</option>
-                    {% endfor %}
-                </select>
-            {% endif %}
+        {% if immobiliers is empty %}
+            <p class="text-center">Aucun immobilier disponible pour commenter.</p>
+        {% else %}
+            <form action="{{ path('app_avis_new') }}" method="post" class="shadow-lg p-4 rounded bg-light">
+                {% if immobilier %}
+                    <input type="hidden" name="immobilier_id" value="{{ immobilier.id }}">
+                    <div class="mb-3">
+                        <label class="form-label">Commenter l'immobilier :</label>
+                        <p class="form-control-plaintext">{{ immobilier.description }}</p>
+                    </div>
+                {% else %}
+                    <div class="mb-3">
+                        <label for="immobilier_id" class="form-label">Choisir un immobilier :</label>
+                        <select name="immobilier_id" id="immobilier_id" class="form-select" required>
+                            <option value="">Sélectionnez un immobilier</option>
+                            {% for imm in immobiliers %}
+                                <option value="{{ imm.id }}">{{ imm.description }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                {% endif %}
 
-            <div>
-                <label for="contenu">Contenu de l'avis :</label>
-                <textarea name="contenu" id="contenu" required></textarea>
-            </div>
+                <div class="mb-3">
+                    <label for="contenu" class="form-label">Contenu de l'avis :</label>
+                    <textarea name="contenu" id="contenu" class="form-control" rows="5" placeholder="Rédigez votre avis ici..." required></textarea>
+                </div>
 
-            <button type="submit" class="btn btn-success">
-                <i class="fas fa-paper-plane"></i> Soumettre
-            </button>
-        </form>
-    {% endif %}
+                <button type="submit" class="btn btn-success w-100 mt-3">
+                    <i class="fas fa-paper-plane"></i> Soumettre
+                </button>
+            </form>
+        {% endif %}
 
-    <a href="{{ path('app_immobilier_index') }}">Retour à la liste</a>
+        <div class="text-center mt-4">
+            <a href="{{ path('app_immobilier_index') }}" class="btn btn-outline-primary">
+                Retour à la liste
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        // Optional: Add smooth animations on the form for interactions
+        document.querySelector('form').addEventListener('submit', function () {
+            document.querySelector('button[type="submit"]').classList.add('animate__animated', 'animate__rubberBand');
+        });
+    </script>
 {% endblock %}

@@ -1,78 +1,100 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Tableau de bord Administrateur</h1>
-    <p>Bienvenue, {{ app.user.email }}</p>
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Tableau de bord Administrateur</h1>
+        <p class="text-center">Bienvenue, {{ app.user.email }}</p>
 
-    <div class="dashboard-stats">
-        <div class="stat-box">
-            <h3>Utilisateurs</h3>
-            <p>{{ userCount }}</p>
+        <div class="dashboard-stats">
+            <div class="stat-box">
+                <h3>Utilisateurs</h3>
+                <p>{{ userCount }}</p>
+            </div>
+            <div class="stat-box">
+                <h3>Appartements</h3>
+                <p>{{ immobilierCount }}</p>
+            </div>
+            <div class="stat-box">
+                <h3>Réservations</h3>
+                <p>{{ reservationCount }}</p>
+            </div>
         </div>
-        <div class="stat-box">
-            <h3>Appartements</h3>
-            <p>{{ immobilierCount }}</p>
-        </div>
-        <div class="stat-box">
-            <h3>Réservations</h3>
-            <p>{{ reservationCount }}</p>
+
+        <div class="text-center mt-4">
+            <a href="{{ path('admin_users') }}" class="btn btn-primary"><i class="fas fa-users"></i> Voir les utilisateurs</a>
+            <a href="{{ path('admin_reservations') }}" class="btn btn-primary"><i class="fas fa-bookmark"></i> Voir les réservations</a>
+            <a href="{{ path('app_reclamation_index') }}" class="btn btn-primary"><i class="fas fa-list-alt"></i> Gérer les Réclamations</a>
+            <a href="{{ path('app_avis_index') }}" class="btn btn-primary"><i class="fas fa-star"></i> Gérer les Avis</a>
+            <a href="{{ path('app_logout') }}" class="btn btn-danger"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
         </div>
     </div>
-
-    <a href="{{ path('admin_users') }}" class="btn btn-primary">Voir les utilisateurs</a>
-    <a href="{{ path('admin_reservations') }}" class="btn btn-primary">Voir les réservations</a>
-    <a href="{{ path('app_reclamation_index') }}" class="btn btn-primary">
-        <i class="fas fa-list-alt"></i> Gérer les Réclamations
-    </a>
-    <a href="{{ path('app_avis_index') }}" class="btn btn-primary">
-        <i class="fas fa-list-alt"></i> Gérer les Avis
-    </a>
-    <a href="{{ path('app_logout') }}" class="btn btn-danger">Déconnexion</a>
 {% endblock %}
 
 {% block stylesheets %}
     <style>
         .dashboard-stats {
             display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            gap: 20px;
         }
 
         .stat-box {
             border: 1px solid #ddd;
-            padding: 20px;
-            width: 25%;
+            padding: 30px;
+            width: 30%;
             text-align: center;
-            background-color: #f9f9f9;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
         }
 
         .stat-box h3 {
-            font-size: 1.5em;
+            font-size: 1.6em;
             color: #333;
         }
 
         .stat-box p {
-            font-size: 2em;
+            font-size: 2.2em;
             color: #4CAF50;
             font-weight: bold;
+            margin-top: 10px;
         }
 
         .btn {
-            margin-top: 10px;
-            padding: 10px 20px;
+            display: inline-block;
+            padding: 12px 20px;
+            margin-top: 20px;
             font-size: 16px;
             color: #fff;
             background-color: #007BFF;
+            border-radius: 5px;
             text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
         .btn-danger {
             background-color: #FF5733;
         }
 
-        .btn-primary:hover, .btn-danger:hover {
-            opacity: 0.8;
+        .btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .btn-danger:hover {
+            background-color: #e74c3c;
+            transform: scale(1.05);
+        }
+
+        .btn i {
+            margin-right: 8px;
         }
     </style>
 {% endblock %}

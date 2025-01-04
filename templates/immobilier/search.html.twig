@@ -4,50 +4,73 @@
 
 {% block stylesheets %}
     <style>
-
+        /* Formulaire de recherche horizontal */
         .search-form {
             display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: space-between;
             align-items: center;
-            background-color: #ffffff;
-            padding: 15px 20px;
-            border-radius: 50px;
+            gap: 15px;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 30px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            overflow-x: auto;
         }
 
         .search-form .form-control {
             border-radius: 25px;
             padding: 10px 15px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
         .search-form .btn-primary {
             border-radius: 25px;
             padding: 10px 20px;
+            background: linear-gradient(90deg, #007bff, #0056b3);
+            border: none;
+            white-space: nowrap;
         }
 
-        /* Style pour la liste des résultats */
+        .search-form .btn-primary:hover {
+            background: linear-gradient(90deg, #0056b3, #003d80);
+        }
+
+        /* Résultats de recherche */
         .card {
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            transition: box-shadow 0.3s ease;
+            border: none;
+            border-radius: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+            animation: float-card 0.5s ease-in-out;
         }
 
         .card:hover {
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transform: translateY(-10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
 
         .card img {
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 3px solid #007bff;
         }
 
+        /* Animation pour les cartes */
+        @keyframes float-card {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
             .search-form {
-                flex-direction: column;
-                gap: 10px;
+                flex-wrap: wrap;
             }
 
             .search-form .btn-primary {
@@ -58,23 +81,19 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Recherche de biens immobiliers</h1>
+    <div class="container my-5">
+        <h1 class="text-center mb-4 text-primary">Trouver votre Bien Immobilier</h1>
 
-    <form method="get" action="{{ path('app_immobilier_search') }}" class="search-form">
-
-        <div class="flex-fill">
+        <!-- Formulaire de recherche horizontal -->
+        <form method="get" action="{{ path('app_immobilier_search') }}" class="search-form">
             <input
                     type="text"
                     id="region"
                     name="region"
                     class="form-control"
                     value="{{ searchParams.region ?? '' }}"
-                    placeholder="Région "
+                    placeholder="Région"
             >
-        </div>
-
-
-        <div class="flex-fill">
             <input
                     type="number"
                     id="min_prix"
@@ -83,10 +102,6 @@
                     value="{{ searchParams.min_prix ?? '' }}"
                     placeholder="Prix minimum (dt)"
             >
-        </div>
-
-
-        <div class="flex-fill">
             <input
                     type="number"
                     id="max_prix"
@@ -95,50 +110,42 @@
                     value="{{ searchParams.max_prix ?? '' }}"
                     placeholder="Prix maximum (dt)"
             >
-        </div>
-
-
-        <div>
             <button type="submit" class="btn btn-primary">
                 <i class="fa fa-search"></i> Rechercher
             </button>
-        </div>
-    </form>
+        </form>
 
-    <hr>
+        <hr>
 
-    {% if immobiliers is not empty %}
-        <h2>Résultats de la recherche</h2>
-        <div class="row">
-            {% for immobilier in immobiliers %}
-                <div class="col-md-4">
-                    <div class="card mb-3">
-                        <img
-                                src="{{ asset('images/' ~ immobilier.image) }}"
-                                class="card-img-top"
-                                alt="{{ immobilier.description }}"
-                        >
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                {{ immobilier.ville }} - {{ immobilier.region }}
-                            </h5>
-                            <p class="card-text">{{ immobilier.description }}</p>
-                            <p class="card-text">
-                                <strong>Prix :</strong> {{ immobilier.prix | number_format(2, ',', ' ') }}dt<br>
-                                <strong>Chambres :</strong> {{ immobilier.nbrChambres }}
-                            </p>
-                            <a
-                                    href="{{ path('app_immobilier_show', {id: immobilier.id}) }}"
-                                    class="btn btn-info"
-                            >
-                                Voir le détail
-                            </a>
+        <!-- Résultats de la recherche -->
+        {% if immobiliers is not empty %}
+            <h2 class="text-center text-secondary mb-4">Résultats de la Recherche</h2>
+            <div class="row g-4">
+                {% for immobilier in immobiliers %}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card shadow-sm">
+                            <img src="{{ asset('images/' ~ immobilier.image) }}" alt="{{ immobilier.description }}" class="card-img-top">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">{{ immobilier.ville }} - {{ immobilier.region }}</h5>
+                                <p class="card-text text-muted small">
+                                    {{ immobilier.description|slice(0, 100) ~ '...' }}
+                                </p>
+                                <p class="card-text">
+                                    <strong>Prix :</strong> {{ immobilier.prix|number_format(2, ',', ' ') }} dt<br>
+                                    <strong>Chambres :</strong> {{ immobilier.nbrChambres }}
+                                </p>
+                                <a href="{{ path('app_immobilier_show', {id: immobilier.id}) }}" class="btn btn-info mt-auto">
+                                    Voir le détail
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
-        </div>
-    {% else %}
-        <p>Aucun bien immobilier ne correspond à vos critères.</p>
-    {% endif %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info text-center mt-4">
+                Aucun bien immobilier ne correspond à vos critères.
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

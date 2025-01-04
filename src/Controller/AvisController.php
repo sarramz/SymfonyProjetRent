@@ -119,14 +119,13 @@ final class AvisController extends AbstractController
     #[Route('/{id}/delete', name: 'app_avis_delete', methods: ['POST'])]
     public function delete(Request $request, Avis $avis, EntityManagerInterface $entityManager): Response
     {
-        $immobilier = $avis->getImmobilier(); // Récupérer le bien immobilier associé.
-
+        $immobilier = $avis->getImmobilier();
         if ($this->isCsrfTokenValid('delete' . $avis->getId(), $request->request->get('_token'))) {
             $entityManager->remove($avis);
             $entityManager->flush();
             $this->addFlash('success', 'Avis supprimé avec succès.');
 
-            // Redirection vers la page du bien immobilier associé ou la liste générale.
+
             return $this->redirectToRoute('app_immobilier_show', ['id' => $immobilier->getId()]);
         }
 

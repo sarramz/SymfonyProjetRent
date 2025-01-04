@@ -3,61 +3,116 @@
 {% block title %}Mon Profil{% endblock %}
 
 {% block body %}
-    <div class="container mt-4">
-        <h1>Mon Profil</h1>
-        {% if user %}
-            <h2>Bienvenue, {{ user.firstName }} {{ user.lastName }}</h2>
+    <div class="container mt-5">
+        <div class="card shadow-lg p-4">
+            <h1 class="text-center mb-4">Mon Profil</h1>
 
-            {% if user.profilePicture %}
-                <img src="{{ asset('images/' ~ user.profilePicture) }}" alt="Photo de profil" class="rounded mb-3" width="150">
+            {% if user %}
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold">Bienvenue, {{ user.firstName }} {{ user.lastName }}</h2>
+                    {% if user.profilePicture %}
+                        <img src="{{ asset('images/' ~ user.profilePicture) }}"
+                             alt="Photo de profil"
+                             class="rounded-circle shadow-sm mb-3"
+                             width="150" height="150">
+                    {% else %}
+                        <div class="placeholder rounded-circle shadow-sm bg-light d-flex align-items-center justify-content-center mb-3" style="width: 150px; height: 150px;">
+                            <i class="fas fa-user fa-5x text-muted"></i>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <form method="post" action="{{ path('app_profile') }}" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('profile_update') }}">
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="firstName" class="form-label">Prénom</label>
+                            <input type="text" name="firstName" id="firstName" class="form-control" value="{{ user.firstName }}" required>
+                            {% if errors.firstName is defined %}
+                                <div class="text-danger">{{ errors.firstName }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="lastName" class="form-label">Nom</label>
+                            <input type="text" name="lastName" id="lastName" class="form-control" value="{{ user.lastName }}" required>
+                            {% if errors.lastName is defined %}
+                                <div class="text-danger">{{ errors.lastName }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="profilePicture" class="form-label">Photo de profil</label>
+                        <input type="file" name="profilePicture" id="profilePicture" class="form-control">
+                        {% if errors.profilePicture is defined %}
+                            <div class="text-danger">{{ errors.profilePicture }}</div>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Mettre à jour</button>
+                </form>
+
+                <hr class="my-4">
+
+                <div class="d-flex justify-content-center gap-3 mb-4">
+                    <a href="{{ path('app_reclamation_new') }}" class="btn btn-warning btn-sm">
+                        <i class="fas fa-exclamation-circle"></i> Faire une réclamation
+                    </a>
+                    <a href="{{ path('app_immobilierGet_new') }}" class="btn btn-info btn-sm">
+                        <i class="fas fa-building"></i> Ajouter un Immobilier
+                    </a>
+                </div>
+
+                <h2 class="text-center mb-3">Mes Réclamations</h2>
+                <ul class="list-group">
+                    {% if reclamations is defined and reclamations is not empty %}
+                        {% for reclamation in reclamations %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Réclamation #{{ reclamation.id }} : {{ reclamation.contenu }}
+                                <a href="{{ path('app_reclamation_show', {id: reclamation.id}) }}" class="badge bg-primary rounded-pill">Voir plus</a>
+                            </li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="list-group-item text-center">Aucune réclamation disponible.</li>
+                    {% endif %}
+                </ul>
+                <h2 class="text-center mb-3">Mes Réservations</h2>
+                <ul class="list-group">
+                    {% if reservations is defined and reservations is not empty %}
+                        {% for reservation in reservations %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Réservation #{{ reservation.id }} :
+                                du {{ reservation.dateDebut|date('d/m/Y') }} au {{ reservation.dateFin|date('d/m/Y') }}
+                                <a href="{{ path('app_reservation_show', {id: reservation.id}) }}"  class="badge bg-primary rounded-pill" >Détails</a>
+                            </li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="list-group-item text-center">Aucune réservation disponible.</li>
+                    {% endif %}
+                </ul>
+            {% else %}
+                <div class="alert alert-danger text-center mt-4">
+                    <p>Utilisateur non connecté.</p>
+                </div>
             {% endif %}
-
-            <form method="post" action="{{ path('app_profile') }}" enctype="multipart/form-data">
-                <input type="hidden" name="_csrf_token" value="{{ csrf_token('profile_update') }}">
-                <div class="mb-3">
-                    <label for="firstName">Prénom</label>
-                    <input type="text" name="firstName" class="form-control" value="{{ user.firstName }}">
-                    {% if errors.firstName is defined %}
-                        <div class="text-danger">{{ errors.firstName }}</div>
-                    {% endif %}
-                </div>
-                <div class="mb-3">
-                    <label for="lastName">Nom</label>
-                    <input type="text" name="lastName" class="form-control" value="{{ user.lastName }}">
-                    {% if errors.lastName is defined %}
-                        <div class="text-danger">{{ errors.lastName }}</div>
-                    {% endif %}
-                </div>
-                <div class="mb-3">
-                    <label for="profilePicture">Photo de profil</label>
-                    <input type="file" name="profilePicture" class="form-control">
-                    {% if errors.profilePicture is defined %}
-                        <div class="text-danger">{{ errors.profilePicture }}</div>
-                    {% endif %}
-                </div>
-                <button class="btn btn-primary">Mettre à jour</button>
-            </form>
-
-            <hr>
-
-                <a href="{{ path('app_reclamation_new') }}" class="btn btn-warning btn-sm">
-                    <i class="fas fa-exclamation-circle"></i> Faire une réclamation
-                </a>
-           <a href="{{ path('app_immobilierGet_new') }}"  class="btn btn-info btn-sm" ><i class="fas fa-building"></i> Ajouter un Immobilier</a>
-
-            <h2>Mes Réclamations</h2>
-            <ul class="list-group">
-                {% if reclamations is defined and reclamations is not empty %}
-                    {% for reclamation in reclamations %}
-                        <li class="list-group-item">Réclamation #{{ reclamation.id }} : {{ reclamation.contenu }}</li>
-                    {% endfor %}
-                {% else %}
-                    <li class="list-group-item">Aucune réclamation disponible.</li>
-                {% endif %}
-            </ul>
-
-        {% else %}
-            <p>Utilisateur non connecté.</p>
-        {% endif %}
+        </div>
     </div>
+
+    <script>
+        // Bootstrap form validation script
+        (function () {
+            'use strict'
+            const forms = document.querySelectorAll('.needs-validation')
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
 {% endblock %}
