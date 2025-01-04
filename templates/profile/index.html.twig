@@ -40,6 +40,11 @@
 
             <hr>
 
+                <a href="{{ path('app_reclamation_new') }}" class="btn btn-warning btn-sm">
+                    <i class="fas fa-exclamation-circle"></i> Faire une réclamation
+                </a>
+           <a href="{{ path('app_immobilierGet_new') }}"  class="btn btn-info btn-sm" ><i class="fas fa-building"></i> Ajouter un Immobilier</a>
+
             <h2>Mes Réclamations</h2>
             <ul class="list-group">
                 {% if reclamations is defined and reclamations is not empty %}

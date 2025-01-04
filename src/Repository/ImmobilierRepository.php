@@ -15,6 +15,22 @@ class ImmobilierRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Immobilier::class);
     }
+// src/Repository/ImmobilierRepository.php
+    public function findBySearchCriteria(string $region, float $minPrix, float $maxPrix): array
+    {
+        $qb = $this->createQueryBuilder('i');
+
+        if (!empty($region)) {
+            $qb->andWhere('i.region LIKE :region')
+                ->setParameter('region', '%' . $region . '%');
+        }
+
+        $qb->andWhere('i.prix BETWEEN :minPrix AND :maxPrix')
+            ->setParameter('minPrix', $minPrix)
+            ->setParameter('maxPrix', $maxPrix);
+
+        return $qb->getQuery()->getResult();
+    }
 
     //    /**
     //     * @return Immobilier[] Returns an array of Immobilier objects

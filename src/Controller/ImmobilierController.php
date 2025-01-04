@@ -23,6 +23,26 @@ final class ImmobilierController extends AbstractController
             'immobiliers' => $immobilierRepository->findAll(),
         ]);
     }
+    #[Route('/search', name: 'app_immobilier_search', methods: ['GET', 'POST'])]
+    public function search(Request $request, ImmobilierRepository $immobilierRepository): Response
+    {
+        // Récupération des critères de recherche
+        $region = $request->query->get('region', '');
+        $minPrix = (float) $request->query->get('min_prix', 0);
+        $maxPrix = (float) $request->query->get('max_prix', PHP_INT_MAX);
+
+        // Recherche avancée avec des critères
+        $immobiliers = $immobilierRepository->findBySearchCriteria($region, $minPrix, $maxPrix);
+
+        return $this->render('immobilier/search.html.twig', [
+            'immobiliers' => $immobiliers,
+            'searchParams' => [
+                'region' => $region,
+                'min_prix' => $minPrix,
+                'max_prix' => $maxPrix,
+            ],
+        ]);
+    }
 
     #[Route('/add', name: 'app_immobilierGet_new', methods: ['GET'])]
     public function newI(): Response
@@ -158,7 +178,15 @@ final class ImmobilierController extends AbstractController
     #[Route('/{id}', name: 'app_immobilier_delete', methods: ['POST'])]
     public function delete(Request $request, Immobilier $immobilier, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$immobilier->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $immobilier->getId(), $request->request->get('_token'))) {
+            foreach ($immobilier->getAvis() as $avis) {
+                $entityManager->remove($avis);
+            }
+
+            foreach ($immobilier->getReservation() as $reservation) {
+                $entityManager->remove($reservation);
+            }
+
             $entityManager->remove($immobilier);
             $entityManager->flush();
         }

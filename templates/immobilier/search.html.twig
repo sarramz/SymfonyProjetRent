@@ -1,0 +1,144 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recherche de biens immobiliers{% endblock %}
+
+{% block stylesheets %}
+    <style>
+
+        .search-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ffffff;
+            padding: 15px 20px;
+            border-radius: 50px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .search-form .form-control {
+            border-radius: 25px;
+            padding: 10px 15px;
+        }
+
+        .search-form .btn-primary {
+            border-radius: 25px;
+            padding: 10px 20px;
+        }
+
+        /* Style pour la liste des résultats */
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .card img {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .search-form {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .search-form .btn-primary {
+                width: 100%;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <h1>Recherche de biens immobiliers</h1>
+
+    <form method="get" action="{{ path('app_immobilier_search') }}" class="search-form">
+
+        <div class="flex-fill">
+            <input
+                    type="text"
+                    id="region"
+                    name="region"
+                    class="form-control"
+                    value="{{ searchParams.region ?? '' }}"
+                    placeholder="Région "
+            >
+        </div>
+
+
+        <div class="flex-fill">
+            <input
+                    type="number"
+                    id="min_prix"
+                    name="min_prix"
+                    class="form-control"
+                    value="{{ searchParams.min_prix ?? '' }}"
+                    placeholder="Prix minimum (dt)"
+            >
+        </div>
+
+
+        <div class="flex-fill">
+            <input
+                    type="number"
+                    id="max_prix"
+                    name="max_prix"
+                    class="form-control"
+                    value="{{ searchParams.max_prix ?? '' }}"
+                    placeholder="Prix maximum (dt)"
+            >
+        </div>
+
+
+        <div>
+            <button type="submit" class="btn btn-primary">
+                <i class="fa fa-search"></i> Rechercher
+            </button>
+        </div>
+    </form>
+
+    <hr>
+
+    {% if immobiliers is not empty %}
+        <h2>Résultats de la recherche</h2>
+        <div class="row">
+            {% for immobilier in immobiliers %}
+                <div class="col-md-4">
+                    <div class="card mb-3">
+                        <img
+                                src="{{ asset('images/' ~ immobilier.image) }}"
+                                class="card-img-top"
+                                alt="{{ immobilier.description }}"
+                        >
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {{ immobilier.ville }} - {{ immobilier.region }}
+                            </h5>
+                            <p class="card-text">{{ immobilier.description }}</p>
+                            <p class="card-text">
+                                <strong>Prix :</strong> {{ immobilier.prix | number_format(2, ',', ' ') }}dt<br>
+                                <strong>Chambres :</strong> {{ immobilier.nbrChambres }}
+                            </p>
+                            <a
+                                    href="{{ path('app_immobilier_show', {id: immobilier.id}) }}"
+                                    class="btn btn-info"
+                            >
+                                Voir le détail
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Aucun bien immobilier ne correspond à vos critères.</p>
+    {% endif %}
+{% endblock %}

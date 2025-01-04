@@ -49,11 +49,17 @@
             <th>Date de création</th>
             <td>{{ immobilier.createdAt|date('d/m/Y H:i') }}</td>
         </tr>
+        <tr>
+            <th> Avis</th>
+            <td>{{ immobilier.avis|length }}</td>
+        </tr>
         </tbody>
     </table>
 
     <a href="{{ path('app_immobilier_index') }}" class="btn btn-secondary">Retour à la liste</a>
     <a href="{{ path('app_immobilier_edit', {'id': immobilier.id}) }}" class="btn btn-primary">Modifier</a>
-
+    <a href="{{ path('app_avis_get_new', {'immobilierId': immobilier.id}) }}" class="btn btn-success btn-sm">
+        <i class="fas fa-comment-alt"></i> Ajouter un avis
+    </a>
     {{ include('immobilier/_delete_form.html.twig') }}
 {% endblock %}

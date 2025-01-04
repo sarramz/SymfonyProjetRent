@@ -9,17 +9,16 @@
         <div class="row">
             {% for immobilier in immobiliers %}
                 <div class="col-md-4 mb-4">
-                    <div class="card shadow-sm">
+                    <div class="card">
                         <img src="{{ asset('images/' ~ immobilier.image) }}" class="card-img-top" alt="Image de l'immobilier">
                         <div class="card-body">
                             <h5 class="card-title">{{ immobilier.description }}</h5>
                             <p class="card-text">
-                                <strong>Prix:</strong> {{ immobilier.prix }} €<br>
+                                <strong>Prix:</strong> {{ immobilier.prix }} DT<br>
                                 <strong>Adresse:</strong> {{ immobilier.adresse }}<br>
                                 <strong>Ville:</strong> {{ immobilier.ville }}
                             </p>
                             <div class="d-flex justify-content-between">
-
                                 <a href="{{ path('app_immobilier_show', {'id': immobilier.id}) }}" class="btn btn-primary btn-sm">
                                     <i class="fas fa-eye"></i> Voir
                                 </a>
@@ -29,11 +28,15 @@
                                 <a href="{{ path('app_avis_index', {'immobilierId': immobilier.id}) }}" class="btn btn-info btn-sm">
                                     <i class="fas fa-comments"></i> Avis
                                 </a>
-                                <strong>Avis:</strong> {{ immobilier.avis|length }}
-
                                 <a href="{{ path('app_avis_get_new', {'immobilierId': immobilier.id}) }}" class="btn btn-success btn-sm">
                                     <i class="fas fa-comment-alt"></i> Ajouter un avis
                                 </a>
+                                <form method="post" action="{{ path('app_immobilier_delete', {'id': immobilier.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer ce bien ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ immobilier.id) }}">
+                                    <button class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash-alt"></i> Supprimer
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
