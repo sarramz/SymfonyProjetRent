@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #141e30, #243b55);
+            font-family: 'Jost', sans-serif;
+            margin: 0;
+        }
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+        .auth-box {
+            display: flex;
+            flex: 1;
+            justify-content: space-between;
+        }
+        .left-side {
+            flex: 1;
+            padding: 2rem;
+            color: white;
+            text-align: center;
+        }
+        .right-side {
+            flex: 1;
+            background: white;
+            padding: 2rem;
+            border-radius: 0 20px 20px 0;
+        }
+        h1 {
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        .btn-primary {
+            background: rgba(255, 140, 0, 0.8);
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            width: 100%;
+            font-size: 1rem;
+        }
+        .btn-primary:hover {
+            background: #e0564f;
+        }
+        a {
+            text-decoration: none;
+            color: #ff7e5f;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        footer{
+            display: none;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="auth-container">
+        <div class="auth-box">
+            <div class="left-side">
+                <h1>Bienvenue!</h1>
+                <h2>SBR LOCATION</h2>
+                <p>La Tunisie vous ouvre ses portes, une maison à la fois. Connectez-vous pour explorer des foyers où vos rêves prennent racine.</p>
+
+            </div>
+            <div class="right-side">
+                <h1 class="text-black">Connexion</h1>
+                {% if error %}
+                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+
+                {% if app.user %}
+                    <div class="alert alert-info">
+                        Vous êtes connecté en tant que {{ app.user.userIdentifier }}.
+                        <a href="{{ path('app_logout') }}">Déconnexion</a>
+                    </div>
+                {% endif %}
+
+                <form method="post">
+                    <div class="form-group">
+                        <label for="inputEmail" class="text-black">Email</label>
+                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="example@gmail.com" autocomplete="email" required autofocus>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword" class="text-black">Mot de passe</label>
+                        <input type="password" name="password" placeholder="Your Password here" id="inputPassword" class="form-control" autocomplete="current-password" required>
+                    </div>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    <button class="btn btn-primary" type="submit">Se connecter</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

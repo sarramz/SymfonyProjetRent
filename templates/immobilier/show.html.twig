@@ -1,0 +1,135 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de l'immobilier{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            font-family: 'Roboto', sans-serif;
+        }
+        .property-image {
+            height: 400px;
+            object-fit: cover;
+            width: 100%;
+        }
+        .property-details {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .action-buttons .btn {
+            transition: transform 0.2s;
+        }
+        .action-buttons .btn:hover {
+            transform: translateY(-3px);
+        }
+        .review-form {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .review-item {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        .review-item:hover {
+            transform: translateY(-3px);
+        }
+        .btn-avis{
+            background: rgba(255, 140, 0, 0.8);;
+        }
+        .btn-avis:hover{
+            background: rgba(253, 117, 31, 0.8);;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container py-5">
+        <div class="row g-4">
+            <!-- Property Image -->
+            <div class="col-lg-6">
+                <img src="{{ asset('images/defaultCover.jpg') }}" class="img-fluid rounded property-image" alt="Image de l'immobilier">
+            </div>
+
+            <!-- Property Info & Actions -->
+            <div class="col-lg-6">
+                <div class="property-details p-4">
+                    <h2 class="mb-3">{{ immobilier.description }}</h2>
+                    <p class="text-muted">
+                        <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                        {{ immobilier.adresse }}, {{ immobilier.ville }}, {{ immobilier.region }}
+                    </p>
+                    <h3 class=" mb-4">{{ immobilier.prix }} DT</h3>
+
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <p><i class="fas fa-bed text-secondary me-2"></i> {{ immobilier.nbrChambres }} chambres</p>
+                            <p><i class="fas fa-info-circle text-secondary me-2"></i> {{ immobilier.statut }}</p>
+                        </div>
+                        <div class="col-6">
+                            <p><i class="far fa-calendar-alt text-secondary me-2"></i> {{ immobilier.createdAt|date('d/m/Y') }}</p>
+                            <p><i class="far fa-comment text-secondary me-2"></i> {{ immobilier.avis|length }} avis</p>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons d-flex gap-2">
+                        <a href="{{ path('app_immobilier_index') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Retour
+                        </a>
+                        <a href="{{ path('app_immobilier_edit', {'id': immobilier.id}) }}" class="btn btn-primary">
+                            <i class="fas fa-edit me-2"></i>Modifier
+                        </a>
+
+                        <form method="post" action="{{ path('app_immobilier_delete', {'id': immobilier.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer ce bien ?');" class="d-inline">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ immobilier.id) }}">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash-alt me-2"></i>Supprimer
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Avis Section -->
+        <div class="mt-5">
+            <h3 class="mb-4">Laissez un avis</h3>
+            <form action="{{ path('app_avis_new') }}" method="post" class="review-form p-4 mb-5">
+                <input type="hidden" name="immobilier_id" value="{{ immobilier.id }}">
+                <div class="mb-3">
+                    <label for="contenu" class="form-label">Votre Avis :</label>
+                    <textarea name="contenu" id="contenu" class="form-control" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-avis">
+                    <i class="fas fa-paper-plane me-2"></i>Envoyer
+                </button>
+            </form>
+
+            <h3 class="mb-4">Avis des utilisateurs</h3>
+            {% if immobilier.avis is not empty %}
+                <div class="row g-4">
+                    {% for avis in immobilier.avis %}
+                        <div class="col-md-6">
+                            <div class="review-item p-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <strong>{{ avis.user ? avis.user.email : 'Anonyme' }}</strong>
+                                    <small class="text-muted">{{ avis.date|date('d/m/Y') }}</small>
+                                </div>
+                                <p class="mb-0">{{ avis.contenu }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted">Aucun avis pour cet immobilier.</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+

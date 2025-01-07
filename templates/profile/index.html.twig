@@ -1,0 +1,324 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block body %}
+    <div class="profile-container">
+        <div class="profile-card">
+            <h1 class="profile-title">Mon Profil</h1>
+
+            {% if user %}
+                <div class="profile-header">
+                    <h2 class="profile-name">{{ user.firstName }} {{ user.lastName }}</h2>
+                    <div class="profile-picture-container">
+                        {% if user.profilePicture %}
+                            <img src="{{ asset('images/' ~ user.profilePicture) }}"
+                                 alt="Photo de profil"
+                                 class="profile-picture">
+                        {% else %}
+                            <div class="profile-picture-placeholder">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <form method="post" action="{{ path('app_profile') }}" enctype="multipart/form-data" class="profile-form needs-validation" novalidate>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('profile_update') }}">
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName" class="form-label">Prénom</label>
+                            <input type="text" name="firstName" id="firstName" class="form-input" value="{{ user.firstName }}" required>
+                            {% if errors.firstName is defined %}
+                                <div class="form-error">{{ errors.firstName }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName" class="form-label">Nom</label>
+                            <input type="text" name="lastName" id="lastName" class="form-input" value="{{ user.lastName }}" required>
+                            {% if errors.lastName is defined %}
+                                <div class="form-error">{{ errors.lastName }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profilePicture" class="form-label">Photo de profil</label>
+                        <input type="file" name="profilePicture" id="profilePicture" class="form-input file-input">
+                        {% if errors.profilePicture is defined %}
+                            <div class="form-error">{{ errors.profilePicture }}</div>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                </form>
+
+                <div class="profile-actions">
+                    <a href="{{ path('app_reclamation_new') }}" class="btn btn-secondary">
+                        <i class="fas fa-exclamation-circle"></i> Faire une réclamation
+                    </a>
+                    <a href="{{ path('app_immobilierGet_new') }}" class="btn btn-secondary">
+                        <i class="fas fa-building"></i> Ajouter un Immobilier
+                    </a>
+                </div>
+
+                <div class="profile-section">
+                    <h2 class="section-title">Mes Réclamations</h2>
+                    <ul class="profile-list">
+                        {% if reclamations is defined and reclamations is not empty %}
+                            {% for reclamation in reclamations %}
+                                <li class="profile-list-item">
+                                    <span>Réclamation #{{ reclamation.id }} : {{ reclamation.contenu }}</span>
+                                    <a href="{{ path('app_reclamation_show', {id: reclamation.id}) }}" class="btn btn-small">Voir plus</a>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <li class="profile-list-item empty">Aucune réclamation disponible.</li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <div class="profile-section">
+                    <h2 class="section-title">Mes Réservations</h2>
+                    <ul class="profile-list">
+                        {% if reservations is defined and reservations is not empty %}
+                            {% for reservation in reservations %}
+                                <li class="profile-list-item">
+                                <span>Réservation #{{ reservation.id }} :
+                                    du {{ reservation.dateDebut|date('d/m/Y') }} au {{ reservation.dateFin|date('d/m/Y') }}</span>
+                                    <a href="{{ path('app_reservation_show', {id: reservation.id}) }}" class="btn btn-small">Détails</a>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <li class="profile-list-item empty">Aucune réservation disponible.</li>
+                        {% endif %}
+                    </ul>
+                </div>
+            {% else %}
+                <div class="profile-error">
+                    <p>Utilisateur non connecté.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        // Bootstrap form validation script
+        (function () {
+            'use strict'
+            const forms = document.querySelectorAll('.needs-validation')
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            font-family: 'Roboto', sans-serif;
+        }
+        .profile-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .profile-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+
+        .profile-title {
+            font-size: 2rem;
+            color: #333;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .profile-name {
+            font-size: 1.5rem;
+            color: #444;
+            margin-bottom: 1rem;
+        }
+
+        .profile-picture-container {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-picture {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-picture-placeholder {
+            width: 100%;
+            height: 100%;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #999;
+        }
+
+        .profile-form {
+            margin-bottom: 2rem;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .file-input {
+            border: none;
+            padding: 0;
+        }
+
+        .form-error {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+
+        .btn-small {
+            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+        .profile-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .profile-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            color: #333;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .profile-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .profile-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .profile-list-item:last-child {
+            border-bottom: none;
+        }
+
+        .profile-list-item.empty {
+            justify-content: center;
+            color: #777;
+        }
+
+        .profile-error {
+            text-align: center;
+            color: #dc3545;
+            font-size: 1.125rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .form-row {
+                flex-direction: column;
+            }
+
+            .profile-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
+{% endblock %}
+

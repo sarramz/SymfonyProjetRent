@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Réclamations{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <h1 class="text-center mb-5 animate__animated animate__fadeIn">Liste des Réclamations</h1>
+
+        <div class="row justify-content-center">
+            {% if reclamations|length > 0 %}
+                {% for reclamation in reclamations %}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card shadow-lg h-100 border-light rounded-lg animate__animated animate__fadeIn animate__delay-1s hover-card">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">{{ reclamation.user.email }}</h5>
+                                <p class="card-text">{{ reclamation.contenu|slice(0, 80) }}{{ reclamation.contenu|length > 80 ? '...' : '' }}</p>
+                                <p class="card-text"><small class="text-muted">Date: {{ reclamation.date|date('d/m/Y') }}</small></p>
+                            </div>
+                            <div class="card-footer text-center">
+                                <a href="{{ path('app_reclamation_show', {'id': reclamation.id}) }}" class="btn btn-outline-primary btn-sm w-100">Voir Détails</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center">Aucune réclamation disponible.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            font-family: 'Roboto', sans-serif;
+        }
+        .hover-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 18px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .card-body {
+            background-color: #f8f9fa;
+        }
+
+        .btn-outline-primary {
+            transition: all 0.3s ease;
+            border-color: #f8f9fa;
+            color: rgba(255, 140, 0, 0.8);
+        }
+
+        .btn-outline-primary:hover {
+            background-color: rgba(255, 140, 0, 0.8);
+            border-color: rgba(255, 140, 0, 0.8);
+            color: black;
+        }
+    </style>
+
+    <!-- Add Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+{% endblock %}

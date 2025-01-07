@@ -1,0 +1,205 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Immobilier{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <div class="card shadow-lg border-0 rounded-4 p-5 bg-white">
+            <!-- Titre -->
+            <h1 class=" fw-bold mb-5">Modifier Votre immobilier : </h1>
+
+            <!-- Formulaire -->
+            <form id="immobilierForm" action="{{ path('app_immobilier_edit', {id: immobilier.id}) }}" method="POST" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- Prix -->
+                        <div class="form-group mb-4">
+                            <label for="immobilierPrix" class="form-label">Prix</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-euro-sign"></i></span>
+                                <input type="number" id="immobilierPrix" name="prix" class="form-control" value="{{ immobilier.prix }}" required>
+                            </div>
+                        </div>
+
+                        <!-- Adresse -->
+                        <div class="form-group mb-4">
+                            <label for="immobilierAdresse" class="form-label">Adresse</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                                <input type="text" id="immobilierAdresse" name="adresse" class="form-control" value="{{ immobilier.adresse }}" required>
+                            </div>
+                        </div>
+
+                        <!-- Ville & Région -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label for="immobilierVille" class="form-label">Ville</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-city"></i></span>
+                                    <input type="text" id="immobilierVille" name="ville" class="form-control" value="{{ immobilier.ville }}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="immobilierRegion" class="form-label">Région</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-map"></i></span>
+                                    <input type="text" id="immobilierRegion" name="region" class="form-control" value="{{ immobilier.region }}" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <!-- Description -->
+                        <div class="form-group mb-4">
+                            <label for="immobilierDescription" class="form-label">Description</label>
+                            <textarea id="immobilierDescription" name="description" class="form-control" rows="4" required>{{ immobilier.description }}</textarea>
+                        </div>
+
+                        <!-- Nombre de Chambres -->
+                        <div class="form-group mb-4">
+                            <label for="immobilierNbrChambres" class="form-label">Nombre de Chambres</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-bed"></i></span>
+                                <input type="number" id="immobilierNbrChambres" name="nbr_chambres" class="form-control" value="{{ immobilier.nbrChambres }}" required>
+                            </div>
+                        </div>
+
+                        <!-- Statut -->
+                        <div class="form-group mb-4">
+                            <label for="immobilierStatut" class="form-label">Statut</label>
+                            <select id="immobilierStatut" name="statut" class="form-select" required>
+                                <option value="1" {% if immobilier.statut == 1 %}selected{% endif %}>Disponible</option>
+                                <option value="0" {% if immobilier.statut == 0 %}selected{% endif %}>Non Disponible</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Image -->
+                <div class="form-group mb-4">
+                    <label for="immobilierImage" class="form-label">Image</label>
+                    {% if immobilier.image %}
+                        <div class="mb-3">
+                            <img src="{{ asset('images/' ~ immobilier.image) }}" alt="Current Image" class="img-thumbnail" style="max-width: 200px;">
+                        </div>
+                    {% endif %}
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-image"></i></span>
+                        <input type="file" id="immobilierImage" name="image" class="form-control">
+                    </div>
+                </div>
+
+                <!-- Boutons -->
+                <div class="d-flex justify-content-center gap-3 mt-5">
+                    <button type="submit" class="btn btn-primary  px-4">
+                        <i class="fas fa-save me-2"></i>Enregistrer
+                    </button>
+                    <a href="{{ path('app_immobilier_index') }}" class="btn btn-secondary px-4">
+                        <i class="fas fa-arrow-left me-2"></i>Retour
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body {
+            background-color: #f0f2f5;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .container {
+            max-width: 900px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: rgba(253, 117, 31, 0.8) !important;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #34495e;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control, .form-select {
+            border-radius: 10px;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: rgba(255, 140, 0, 0.8);
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.25);
+        }
+
+        .input-group-text {
+            background-color: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            color: #7f8c8d;
+        }
+
+        .btn {
+            border-radius: 30px;
+            padding: 10px 20px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: rgba(255, 140, 0, 0.8);
+            border-color: rgba(145, 81, 1, 0.8);
+        }
+
+        .btn-primary:hover {
+            background-color: rgba(239, 152, 58, 0.8);
+            border-color: rgba(255, 140, 0, 0.8);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(52, 152, 219, 0.2);
+        }
+
+        .btn-secondary {
+            background-color: #95a5a6;
+            border-color: #95a5a6;
+        }
+
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+            border-color: #7f8c8d;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(149, 165, 166, 0.2);
+        }
+
+        .img-thumbnail {
+            border-radius: 15px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .img-thumbnail:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 2rem !important;
+            }
+        }
+    </style>
+{% endblock %}
