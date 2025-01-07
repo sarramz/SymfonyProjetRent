@@ -108,7 +108,7 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="{{ path('app_reservation_index') }}">Hub</a></li>
-                            <li><a class="dropdown-item" href="{{ path('app_reclamation_new') }}">Nouvelle Réservation</a></li>
+                            <li><a class="dropdown-item" href="{{ path('app_reservation_get_new') }}">Nouvelle Réservation</a></li>
                         </ul>
                     </li>
 
@@ -120,8 +120,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="{{ path('app_reclamation_index') }}">Hub</a></li>
-                                <li><a class="dropdown-item" href="#">Nouvelle Réclamation</a></li>
-                                <li><a class="dropdown-item" href="#">Statistiques</a></li>
+                                <li><a class="dropdown-item" href="{{ path('app_reclamation_new') }}">Nouvelle Réclamation</a></li>
                             </ul>
                         </li>
                     {% endif %}
